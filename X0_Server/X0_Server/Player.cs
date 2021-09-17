@@ -15,7 +15,7 @@ namespace X0_Server
         {
             Name = name;
         }
-        async public static void Recive(TcpListener server, TcpClient client, NetworkStream stream, Dictionary<TcpClient,Player> players)
+        async public static void Recive(TcpClient client, NetworkStream stream, Dictionary<TcpClient,Player> players)
         {
             
             byte[] dataReceived = new byte[4];
