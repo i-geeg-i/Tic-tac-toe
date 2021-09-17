@@ -8,7 +8,6 @@ namespace X0_Client
     {
         static void Main(string[] args)
         {
-            TcpClient client = new TcpClient("127.0.0.1", 1337);
             string test = "123456789";
             while (true && 1 ==  - 1)
             {

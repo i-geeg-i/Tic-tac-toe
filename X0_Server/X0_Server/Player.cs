@@ -10,7 +10,11 @@ namespace X0_Server
     {
         public string Name { get; }
         public int wins { get; set; }
-        
+        public Player(string name)
+        {
+            this.Name = name;
+            wins = 0;
+        }
 
     }
 }
