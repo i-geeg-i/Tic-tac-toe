@@ -35,7 +35,7 @@ namespace X0_Server
             {
                 TcpClient client = await server.AcceptTcpClientAsync();
                 NetworkStream stream = client.GetStream();
-                byte[] dataReceived = new byte[4];
+                //byte[] dataReceived = new byte[4];
                 await stream.ReadAsync(dataReceived, 0, dataReceived.Length);
                 if (players.ContainsKey(client))
                 {
@@ -49,7 +49,7 @@ namespace X0_Server
                 byte[] dataToSend = Encoding.ASCII.GetBytes(toSend.ToString());
                 await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
                 Console.WriteLine("Sent");
-                stream.Close();
+                //stream.Close();
             }
             
         }
