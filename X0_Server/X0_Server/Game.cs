@@ -40,10 +40,10 @@ namespace X0_Server
             Random random = new Random();
             return random.Next(10000, 99999); 
         }
-        public void SendAll()
+        public void SendAll(Player winer)
         {
-            player_who_is_0.Send($"4|",Player.);
-            player_who_is_X.Send($"4|");
+            player_who_is_0.Send($"4|{winer.Client}");
+            player_who_is_X.Send($"4|{winer.Client}");
         }
         public bool SetX(int number)
         {
@@ -54,10 +54,12 @@ namespace X0_Server
                 if (winer == 1)
                 {
                     Console.WriteLine("X win!");
+                    SendAll(player_who_is_X);
                 }
                 else if(winer == 2)
                 {
-                    Console.WriteLine("Y win!");
+                    Console.WriteLine("0 win!");
+                    SendAll(player_who_is_0);
                 }
                 return true;
             }
@@ -76,10 +78,12 @@ namespace X0_Server
                 if (winer == 1)
                 {
                     Console.WriteLine("X win!");
+                    SendAll(player_who_is_X);
                 }
                 else if (winer == 2)
                 {
-                    Console.WriteLine("Y win!");
+                    Console.WriteLine("0 win!");
+                    SendAll(player_who_is_0);
                 }
                 return true;
             }

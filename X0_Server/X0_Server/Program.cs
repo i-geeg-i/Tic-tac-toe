@@ -18,9 +18,9 @@ namespace X0_Server
         async static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            /*к приему:
-             * int состояние ({0 - новая игра},{1 - список},{2 - ход},{(5-ти значный int - идентификатор игры)}) 4
-             * int x 4
+            /*Recive:
+             * int Condition ({0 - new game},{1 - list of avaliable games},{2 - move},{(5 numbers int - id of game)}) 4
+             * int x 4 
              */ 
             IPAddress ip = IPAddress.Parse("127.0.0.1");
             TcpListener server = new TcpListener(ip, 1337);
@@ -29,7 +29,7 @@ namespace X0_Server
             {
                 TcpClient client = await server.AcceptTcpClientAsync();
                 NetworkStream stream = client.GetStream();
-                new Player(client).Recive(stream);
+                new Player(client).Recive();
             }
             
         }

@@ -24,7 +24,7 @@ namespace X0_Server
              * {1} - id of game
              * {2} - list of games
              * {3} - movement of someone
-             * {4} - win
+             * {4} - someone is winer
              */
                         byte[] dataToSend = Encoding.ASCII.GetBytes(text.ToString());
             await Stream.WriteAsync(dataToSend, 0, dataToSend.Length);
