@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace X0_Server
     {
         private static KnowledgeCenter instance;
         public List<Game> games = new List<Game>();
-        public List<Player> players = new List<Player>();
+        public Dictionary<TcpClient,Player> players = new Dictionary<TcpClient, Player>();
         private KnowledgeCenter()
         { }
 
@@ -31,18 +32,6 @@ namespace X0_Server
             }
             return new Game(new Player(new System.Net.Sockets.TcpClient()));
         }
-        /*public List<Game> GetOpenGames()
-        {
-            List<Game> toReturn = new List<Game>();
-            for (int i = 0; i < games.Count; i++)
-            {
-                if (!games[i].started && games[i].player_who_is_X == null && games[i].player_who_is_0 == null)
-                {
-                    toReturn.Add(games[i]);
-                }
-            }
-            return toReturn;
-        }*/
         public string GetOpenGames()
         {
             string toReturn = "";

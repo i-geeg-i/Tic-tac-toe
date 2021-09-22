@@ -9,17 +9,7 @@ namespace X0_Server
 {
     class Program
     {
-        async Task<int> Recive(NetworkStream stream)
-        {
-            byte[] dataReceived = new byte[1024];
-            int bytesRead = await stream.ReadAsync(dataReceived, 0,dataReceived.Length);
-            return dataReceived.Length;
-        }
-        static void Main(string[] args)
-        {
-            Main();
-        }
-        async static void Main()
+        async static Task Main()
         {
             Console.WriteLine("Hello World!");
             /*Recive:
@@ -38,7 +28,7 @@ namespace X0_Server
             {
                 TcpClient client = await server.AcceptTcpClientAsync();
                 NetworkStream stream = client.GetStream();
-                new Player(client).Recive();
+                await new Player(client).PlayerHandler();
             }
             
         }

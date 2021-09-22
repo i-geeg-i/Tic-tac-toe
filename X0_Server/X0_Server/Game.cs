@@ -21,7 +21,7 @@ namespace X0_Server
         }
         public int is_Win(int[] map)
         {
-            //UNDONE: check 
+            //TODO: check 
             if (map[0] == 1 && map[1] == 1 && map[2] == 1)
             {
                 return 1; //X is winner 
