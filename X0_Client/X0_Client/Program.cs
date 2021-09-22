@@ -7,6 +7,8 @@ namespace X0_Client
 {
     class Program
     {
+        private const string V = "1";
+
         static void Send(string text, Socket sock)
         {
             byte[] buffer = new byte[8];
@@ -46,16 +48,21 @@ namespace X0_Client
             int id = 0;
             switch (mes[0])
             {
-                case 1:
+                case "1":
                     id = Convert.ToInt32(mes[1]);
-                case 2:
-                //UNDONE: reading list of games
-                case 3:
-                //UNDONE:Move
-                case 4:
-                //UNDONE: Win
+                    break;
+                case "2":
+                    //TODO: reading list of games
+                    break;
+                case "3":
+                    //TODO:Move
+                    break;
+                case "4":
+                    //TODO: Win
+                    break;
 
             }
+            return "";
         }
         static void Main(string[] args)
         {
