@@ -15,11 +15,20 @@ namespace X0_Server
             int bytesRead = await stream.ReadAsync(dataReceived, 0,dataReceived.Length);
             return dataReceived.Length;
         }
-        async static void Main(string[] args)
+        static void Main(string[] args)
+        {
+            Main();
+        }
+        async static void Main()
         {
             Console.WriteLine("Hello World!");
             /*Recive:
-             * int Condition ({0 - new game},{1 - list of avaliable games},{2 - move},{(5 numbers int - id of game)}) 4
+             * int Condition (
+             * {0 - new game},
+             * {1 - list of avaliable games},
+             * {2 - move},
+             * {(5 numbers int - id of game)}
+             * )
              * int x 4 
              */ 
             IPAddress ip = IPAddress.Parse("127.0.0.1");

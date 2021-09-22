@@ -26,7 +26,7 @@ namespace X0_Server
              * {3} - movement of someone
              * {4} - someone is winer
              */
-                        byte[] dataToSend = Encoding.ASCII.GetBytes(text.ToString());
+            byte[] dataToSend = Encoding.ASCII.GetBytes(text.ToString());
             await Stream.WriteAsync(dataToSend, 0, dataToSend.Length);
             Console.WriteLine("Sent");
             Stream.Close();
