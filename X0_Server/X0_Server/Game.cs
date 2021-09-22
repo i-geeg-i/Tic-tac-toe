@@ -9,29 +9,41 @@ namespace X0_Server
     class Game
     {
         public Player player_who_is_X { get; set; } //x = 1
-        public Player player_who_is_O { get; set; } //y = 2
+        public Player player_who_is_0 { get; set; } //y = 2
         public List<Player> players = new List<Player>();
         private int[] map = new int[9];
         public int id { get; }
+        public bool started { get; set; } = false;
         public Game(Player FirstPlayer)
         {
             players.Add(FirstPlayer);
+            id = CreateId();
         }
         public int is_Win(int[] map)
         {
             //UNDONE: check 
             if (map[0] == 1 && map[1] == 1 && map[2] == 1)
             {
-                return 1;
+                return 1; //X is winner 
             }
             else if (map[0] == 2 && map[1] == 2 && map[2] == 2)
             {
-                return 2;
+                return 2; //Y is winner
             }
             else
             {
-                return 0;
+                return 0; //no one win
             }
+        }
+        public static int CreateId()
+        {
+            Random random = new Random();
+            return random.Next(10000, 99999); 
+        }
+        public void SendAll()
+        {
+            player_who_is_0.Send($"4|",Player.);
+            player_who_is_X.Send($"4|");
         }
         public bool SetX(int number)
         {
@@ -41,11 +53,11 @@ namespace X0_Server
                 int winer = is_Win(map);
                 if (winer == 1)
                 {
-                    Console.WriteLine("Win!");
+                    Console.WriteLine("X win!");
                 }
                 else if(winer == 2)
                 {
-                    Console.WriteLine("Lose!");
+                    Console.WriteLine("Y win!");
                 }
                 return true;
             }
@@ -55,11 +67,20 @@ namespace X0_Server
             }
         }
 
-        public bool SetO(int number)
+        public bool Set0(int number)
         {
             if (number >= 0 && number <= 8 && map[number] == 0)
             {
                 map[number] = 1;
+                int winer = is_Win(map);
+                if (winer == 1)
+                {
+                    Console.WriteLine("X win!");
+                }
+                else if (winer == 2)
+                {
+                    Console.WriteLine("Y win!");
+                }
                 return true;
             }
             else
@@ -67,6 +88,5 @@ namespace X0_Server
                 return false;
             }
         }
-
     }
 }
