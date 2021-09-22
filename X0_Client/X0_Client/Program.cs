@@ -23,6 +23,40 @@ namespace X0_Client
                 totalSent += actuallySent;
             }
         }
+        static string Recive(Socket sock)
+        {
+            byte[] buffer = new byte[18];
+            int totalReceived = 0;
+            while (totalReceived < buffer.Length)
+            {
+                int actuallyReceived = sock.Receive(
+                buffer,
+                totalReceived,
+                buffer.Length - totalReceived,
+                SocketFlags.None
+                );
+
+                totalReceived += actuallyReceived;
+            }
+            return Encoding.ASCII.GetString(buffer);
+        }
+        static string Pars(string text)
+        {
+            string[] mes = text.Split('|');
+            int id = 0;
+            switch (mes[0])
+            {
+                case 1:
+                    id = Convert.ToInt32(mes[1]);
+                case 2:
+                //UNDONE: reading list of games
+                case 3:
+                //UNDONE:Move
+                case 4:
+                //UNDONE: Win
+
+            }
+        }
         static void Main(string[] args)
         {
             string test = "123456789";
@@ -61,6 +95,7 @@ namespace X0_Client
                         }
                         Send(id.ToString(), sock);
                 }
+                Recive();
             }
             Console.WriteLine(test.Length * sizeof(Char));
         }
