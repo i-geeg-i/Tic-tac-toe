@@ -72,50 +72,46 @@ namespace X0_Client
         }
         static void Main(string[] args)
         {
-            string test = "123456789";
-            Console.WriteLine(System.Text.ASCIIEncoding.Unicode.GetByteCount("1|55555"));
-            Console.WriteLine(System.Text.ASCIIEncoding.Unicode.GetByteCount("1"));
             Socket sock = new Socket(
             AddressFamily.InterNetwork, 
             SocketType.Stream, 
             ProtocolType.Tcp 
-            );
-            IPAddress ip = IPAddress.Parse("127.0.0.1");
-            IPEndPoint addr = new IPEndPoint(ip, 1337);
-            sock.Connect(addr);
+            ); //make socket for recive and send
+            IPAddress ip = IPAddress.Parse("127.0.0.1"); //chose ip
+            IPEndPoint addr = new IPEndPoint(ip, 1337); //chose addres
+            sock.Connect(addr);//connect addres and socket
             while (true)
             {
-                Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");
-                int enteredValue = Convert.ToInt32(Console.ReadLine());
-                while (enteredValue > 3 || enteredValue < 1)
+                Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
+                int enteredValue = Convert.ToInt32(Console.ReadLine()); //get value of person chose
+                while (enteredValue > 3 || enteredValue < 1) //if value is incorrect
                 {
-                    Console.WriteLine("Вы ввели некорректное значение");
-                    Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");
-                    enteredValue = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Вы ввели некорректное значение"); //person mistake output
+                    Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
+                    enteredValue = Convert.ToInt32(Console.ReadLine());//get value of person chose
                 }
                 switch (enteredValue)
                 {
-                    case 1:
-                        Send("0", sock);
+                    case 1: //if person want to create new game
+                        Send("0", sock); // send creat code to server
                         break;
-                    case 2:
-                        Send("1", sock);
+                    case 2: //if person want to have list of games
+                        Send("1", sock); // send list code to server
                         break;
-                    case 3:
-                        Console.WriteLine("Введите id игры: ");
-                        int id = Convert.ToInt32(Console.ReadLine());
-                        while (id < 10000 || id > 99999)
+                    case 3: //if person want to connect to the game
+                        Console.WriteLine("Введите id игры: "); //ask game id 
+                        int id = Convert.ToInt32(Console.ReadLine()); //get value of id
+                        while (id < 10000 || id > 99999) //while id is incorrect
                         {
-                            Console.WriteLine("Выввели некорректное значение");
-                            Console.WriteLine("Введите id игры: ");
-                            id = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine("Выввели некорректное значение"); //person mistake output
+                            Console.WriteLine("Введите id игры: "); //ask game id 
+                            id = Convert.ToInt32(Console.ReadLine());//get value of id
                         }
-                        Send(id.ToString(), sock);
+                        Send(id.ToString(), sock); //send connect code to server
                         break;
                 }
-                Pars(Recive(sock));
+                Pars(Recive(sock)); //recive and generate a response
             }
-            Console.WriteLine(test.Length * sizeof(Char));
         }
     }
 }
