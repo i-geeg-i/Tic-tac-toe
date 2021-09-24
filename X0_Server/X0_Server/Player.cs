@@ -16,6 +16,7 @@ namespace X0_Server
         public Player(TcpClient client)
         {
             Client = client;
+            Stream = Client.GetStream();
         }
         async public void Send(string text)
         {
@@ -31,28 +32,29 @@ namespace X0_Server
             Console.WriteLine("Sent");
             Stream.Close();
         }
-        public async Task PlayerHandler()
+        public async Task PlayerHandle()
         {
             while (true)
             {
-                string[] recivedValues = Recive().Result.Split('|');
-                int sost = Convert.ToInt32(recivedValues[0]);
+                string recivedString =  await Recive();
+                string[] recivedValues = recivedString.Split('|');
+                int comand = Convert.ToInt32(recivedValues[0]);
                 int x = Convert.ToInt32(recivedValues[1]);
                 Dictionary<TcpClient,Player> players = KnowledgeCenter.getInstance().players;
                 if (!players.ContainsKey(Client))
                 {
                     players.Add(Client, this);
                 }
-                if (sost == 0 && game == null)
+                if (comand == 0 && game == null)
                 {
                     game = new Game(this);
                     Send($"1|{game.id}");
                 }
-                else if (sost == 1 && game == null)
+                else if (comand == 1 && game == null)
                 {
                     Send($"2|{KnowledgeCenter.getInstance().GetOpenGames()}");
                 }
-                else if (sost == 2 && game != null)
+                else if (comand == 2 && game != null)
                 {
                     if (game.player_who_is_0 == this)
                     {
@@ -68,11 +70,10 @@ namespace X0_Server
                             Send($"3|{Client}|{x}");
                         }
                     }
-
                 }
                 else
                 {
-                    game = KnowledgeCenter.getInstance().FindGame(sost);
+                    game = KnowledgeCenter.getInstance().FindGame(comand);
                     Send($"1|{game.id}");
                 }
             }
@@ -82,12 +83,15 @@ namespace X0_Server
         async public Task<string> Recive()
         {
 
-            byte[] dataReceived = new byte[4];
-            await Stream.ReadAsync(dataReceived, 0, dataReceived.Length);
-            string recivedString = Encoding.ASCII.GetString(dataReceived);
-            return recivedString;
+            byte[] dataReceived = new byte[14]; //place for bytes that we will get after recive
+            int totalReceived = 0;  //variable that shows value of number recived data
+            while (totalReceived < dataReceived.Length)   //running until all data will be recive
+            {
+               
+                int actuallyReceived = await Stream.ReadAsync(dataReceived, totalReceived, dataReceived.Length - totalReceived); //reciving data
+                totalReceived += actuallyReceived;  //increasing the value of number recived data
+            }
+            return Encoding.ASCII.GetString(dataReceived); //return of recived string
         }
-            
-
     }
 }

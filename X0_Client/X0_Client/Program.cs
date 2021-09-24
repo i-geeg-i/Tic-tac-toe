@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -7,66 +8,73 @@ namespace X0_Client
 {
     class Program
     {
-        private const string V = "1";
-
-        static void Send(string text, Socket sock)
+        static void Send(string text, Socket sock)  //function that send data to server
         {
-            byte[] buffer = new byte[8];
-            buffer = Encoding.ASCII.GetBytes(text);
-            int totalSent = 0;
-            while (totalSent < buffer.Length)
+            byte[] buffer;  //place for bytes that we will get after encoding text
+            buffer = Encoding.ASCII.GetBytes(text); //set value for buffer to send to server
+            int totalSent = 0;  //variable that shows value of number sent data
+            while (totalSent < buffer.Length)   //sending until we have sent all data 
             {
                 int actuallySent = sock.Send(
                 buffer,
                 totalSent,
                 buffer.Length - totalSent,
                 SocketFlags.None
-                );
-                totalSent += actuallySent;
+                );  //sending data
+                totalSent += actuallySent;  //increasing the value of number sent data
             }
         }
-        static string Recive(Socket sock)
+        static string Recive(Socket sock) //function that recive data from server
         {
-            byte[] buffer = new byte[18];
-            int totalReceived = 0;
-            while (totalReceived < buffer.Length)
+            byte[] buffer = new byte[18];   //place for bytes that we will get after recive
+            int totalReceived = 0;  //variable that shows value of number recived data
+            while (totalReceived < buffer.Length)   //running until all data will be recive
             {
                 int actuallyReceived = sock.Receive(
                 buffer,
                 totalReceived,
                 buffer.Length - totalReceived,
                 SocketFlags.None
-                );
-
-                totalReceived += actuallyReceived;
+                );  //reciving data
+                //error there
+                totalReceived += actuallyReceived;  //increasing the value of number recived data
             }
             return Encoding.ASCII.GetString(buffer);
         }
-        static string Pars(string text)
+        static void readerOfListOfGames(string text)    //analytic of recived list of games
         {
-            string[] mes = text.Split('|');
-            int id = 0;
-            switch (mes[0])
+            string[] values = text.Split('.');  //get value of list
+            for (int i = 0; i < values.Length; i++)    //go through recived list
             {
-                case "1":
-                    id = Convert.ToInt32(mes[1]);
+                Console.WriteLine(values[i]);   //value of list output 
+            }
+            
+        }
+        static void Pars(string text)   //function that generate a response
+        {
+            string[] message = text.Split('|'); //get value of recived message
+            switch (message[0])
+            {
+                case "1":   //response if we get id of game(maybe because we ask to create new game or to connect to exist game)
+                    Console.WriteLine(Convert.ToInt32(message[1])); //id output
                     break;
-                case "2":
-                    //TODO: reading list of games
+                case "2":   //response if we get list of avaliable games 
+                    readerOfListOfGames(message[1]); //game list output
                     break;
-                case "3":
-                    //TODO:Move
+                case "3":   //response if we get some information about game change (for example move)
+                    //TODO:Game response
                     break;
-                case "4":
-                    //TODO: Win
+                case "4":   //response if we get information about sb win
+                    //TODO:Win response
                     break;
 
             }
-            return "";
         }
         static void Main(string[] args)
         {
             string test = "123456789";
+            Console.WriteLine(System.Text.ASCIIEncoding.Unicode.GetByteCount("1|55555"));
+            Console.WriteLine(System.Text.ASCIIEncoding.Unicode.GetByteCount("1"));
             Socket sock = new Socket(
             AddressFamily.InterNetwork, 
             SocketType.Stream, 
@@ -75,13 +83,13 @@ namespace X0_Client
             IPAddress ip = IPAddress.Parse("127.0.0.1");
             IPEndPoint addr = new IPEndPoint(ip, 1337);
             sock.Connect(addr);
-            while (true && 1 ==  - 1)
+            while (true)
             {
                 Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");
                 int enteredValue = Convert.ToInt32(Console.ReadLine());
                 while (enteredValue > 3 || enteredValue < 1)
                 {
-                    Console.WriteLine("Выввели некорректное значение");
+                    Console.WriteLine("Вы ввели некорректное значение");
                     Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");
                     enteredValue = Convert.ToInt32(Console.ReadLine());
                 }
@@ -89,8 +97,10 @@ namespace X0_Client
                 {
                     case 1:
                         Send("0", sock);
+                        break;
                     case 2:
                         Send("1", sock);
+                        break;
                     case 3:
                         Console.WriteLine("Введите id игры: ");
                         int id = Convert.ToInt32(Console.ReadLine());
@@ -101,8 +111,9 @@ namespace X0_Client
                             id = Convert.ToInt32(Console.ReadLine());
                         }
                         Send(id.ToString(), sock);
+                        break;
                 }
-                Recive();
+                Pars(Recive(sock));
             }
             Console.WriteLine(test.Length * sizeof(Char));
         }

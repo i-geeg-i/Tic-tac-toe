@@ -39,7 +39,14 @@ namespace X0_Server
             {
                 if (!games[i].started && games[i].player_who_is_X == null && games[i].player_who_is_0 == null)
                 {
-                    toReturn += games[i].id + ".";
+                    if(i != games.Count - 1)
+                    {
+                        toReturn += games[i].id + ".";
+                    }
+                    else
+                    {
+                        toReturn += games[i].id;
+                    }
                 }
             }
             return toReturn;
