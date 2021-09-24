@@ -70,6 +70,30 @@ namespace X0_Client
 
             }
         }
+        static void gameOutput(int[] map)
+        {
+            for (int lineNumber = 0; lineNumber < 3; lineNumber++)//go throught lines
+            {
+                Console.Write("|");
+                for (int columnNumber = 0; columnNumber < 3; columnNumber++)//go throught columns
+                {
+                    if (map[lineNumber+columnNumber] == 1) //if unit equal number of X
+                    {
+                        Console.Write("X|"); //X output
+                    }
+                    else if(map[lineNumber + columnNumber] == 2)//if unit equal number of 0
+                    {
+                        Console.Write("0|");//0 output
+                    }
+                    else //if unit is empty
+                    {
+                        Console.Write($" |");//empty output
+                    }
+                    
+                }
+                Console.WriteLine("");//move to next line
+            }
+        }
         static void Main(string[] args)
         {
             Socket sock = new Socket(
@@ -80,6 +104,7 @@ namespace X0_Client
             IPAddress ip = IPAddress.Parse("127.0.0.1"); //chose ip
             IPEndPoint addr = new IPEndPoint(ip, 1337); //chose addres
             sock.Connect(addr);//connect addres and socket
+            int[] map = new int[9]; //creating map of the game (maybe it should be in another class)
             while (true)
             {
                 Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
