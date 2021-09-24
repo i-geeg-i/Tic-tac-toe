@@ -39,6 +39,7 @@ namespace X0_Client
                 //error there
                 totalReceived += actuallyReceived;  //increasing the value of number recived data
             }
+            Console.WriteLine(Encoding.ASCII.GetString(buffer)); //debug
             return Encoding.ASCII.GetString(buffer);
         }
         static void readerOfListOfGames(string text)    //analytic of recived list of games

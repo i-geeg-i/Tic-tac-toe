@@ -49,10 +49,12 @@ namespace X0_Server
                 {
                     game = new Game(this);
                     Send($"1|{game.id}");
+
                 }
                 else if (comand == 1 && game == null)
                 {
                     Send($"2|{KnowledgeCenter.getInstance().GetOpenGames()}");
+                    Console.WriteLine($"2|{KnowledgeCenter.getInstance().GetOpenGames()}".Length * sizeof(Char));
                 }
                 else if (comand == 2 && game != null)
                 {
@@ -83,7 +85,7 @@ namespace X0_Server
         async public Task<string> Recive()
         {
 
-            byte[] dataReceived = new byte[14]; //place for bytes that we will get after recive
+            byte[] dataReceived = new byte[4]; //place for bytes that we will get after recive
             int totalReceived = 0;  //variable that shows value of number recived data
             while (totalReceived < dataReceived.Length)   //running until all data will be recive
             {
@@ -91,6 +93,7 @@ namespace X0_Server
                 int actuallyReceived = await Stream.ReadAsync(dataReceived, totalReceived, dataReceived.Length - totalReceived); //reciving data
                 totalReceived += actuallyReceived;  //increasing the value of number recived data
             }
+            Console.WriteLine(Encoding.ASCII.GetString(dataReceived)); //debug
             return Encoding.ASCII.GetString(dataReceived); //return of recived string
         }
     }
