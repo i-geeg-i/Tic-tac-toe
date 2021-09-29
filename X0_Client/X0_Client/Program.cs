@@ -153,38 +153,47 @@ namespace X0_Client
             IPEndPoint addr = new IPEndPoint(ip, 1337); //chose addres
             sock.Connect(addr);//connect addres and socket
             bool x = false;
+            bool wePlayNow = false;
             int[] map = new int[9]; //creating map of the game (maybe it should be in another class)
             while (true)
             {
-                Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
-                int enteredValue = Convert.ToInt32(Console.ReadLine()); //get value of person chose
-                while (enteredValue > 3 || enteredValue < 1) //if value is incorrect
+                if (!wePlayNow)
                 {
-                    Console.WriteLine("Вы ввели некорректное значение"); //person mistake output
                     Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
-                    enteredValue = Convert.ToInt32(Console.ReadLine());//get value of person chose
-                }
-                switch (enteredValue)
-                {
-                    case 1: //if person want to create new game
-                        Send("0|-1", sock); // send creat code to server
-                        break;
-                    case 2: //if person want to have list of games
-                        Send("1|-1", sock); // send list code to server
-                        break;
-                    case 3: //if person want to connect to the game
-                        Console.WriteLine("Введите id игры: "); //ask game id 
-                        int id = Convert.ToInt32(Console.ReadLine()); //get value of id
-                        while (id < 10000 || id > 99999) //while id is incorrect
-                        {
-                            Console.WriteLine("Выввели некорректное значение"); //person mistake output
+                    int enteredValue = Convert.ToInt32(Console.ReadLine()); //get value of person chose
+                    while (enteredValue > 3 || enteredValue < 1) //if value is incorrect
+                    {
+                        Console.WriteLine("Вы ввели некорректное значение"); //person mistake output
+                        Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
+                        enteredValue = Convert.ToInt32(Console.ReadLine());//get value of person chose
+                    }
+                    switch (enteredValue)
+                    {
+                        case 1: //if person want to create new game
+                            Send("0|-1", sock); // send creat code to server
+                            wePlayNow = true;
+                            break;
+                        case 2: //if person want to have list of games
+                            Send("1|-1", sock); // send list code to server
+                            break;
+                        case 3: //if person want to connect to the game
                             Console.WriteLine("Введите id игры: "); //ask game id 
-                            id = Convert.ToInt32(Console.ReadLine());//get value of id
-                        }
-                        Send($"3|{id.ToString()}", sock); //send connect code to server
-                        break;
+                            int id = Convert.ToInt32(Console.ReadLine()); //get value of id
+                            while (id < 10000 || id > 99999) //while id is incorrect
+                            {
+                                Console.WriteLine("Выввели некорректное значение"); //person mistake output
+                                Console.WriteLine("Введите id игры: "); //ask game id 
+                                id = Convert.ToInt32(Console.ReadLine());//get value of id
+                            }
+                            Send($"3|{id.ToString()}", sock); //send connect code to server
+                            break;
+                    }
+                    Pars(Recive(sock),ref x); //recive and generate a response
                 }
-                Pars(Recive(sock), x); //recive and generate a response
+                else
+                {
+
+                }
             }
         }
     }

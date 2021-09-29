@@ -45,6 +45,18 @@ namespace X0_Server
             await player_who_is_0.Send($"4|{winer.Client}");
             await player_who_is_X.Send($"4|{winer.Client}");
         }
+        async public void SendAll(int[] map)
+        {
+            string movement = "";
+            for (int i = 0; i < map.Length-1; i++)
+            {
+                movement += map[i].ToString();
+                movement += ".";
+            }
+            movement += map[map.Length-1].ToString();
+            await player_who_is_0.Send($"3|{movement}");
+            await player_who_is_X.Send($"3|{movement}");
+        }
         public bool SetX(int number)
         {
             if (number >= 0  && number <= 8 && map[number] == 0)
@@ -61,6 +73,7 @@ namespace X0_Server
                     Console.WriteLine("0 win!");
                     SendAll(player_who_is_0);
                 }
+                SendAll(map);
                 return true;
             }
             else
