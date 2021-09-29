@@ -8,11 +8,15 @@ namespace X0_Client
 {
     class Program
     {
+
         static void Send(string text, Socket sock)  //function that send data to server
         {
             byte[] buffer;  //place for bytes that we will get after encoding text
-            buffer = Encoding.ASCII.GetBytes(text); //set value for buffer to send to server
+            byte[] dataToSend = Encoding.ASCII.GetBytes(text); //set value for buffer to send to server
+            buffer = Encoding.ASCII.GetBytes(String.Format("{0:000}", dataToSend.Length));
+            dataToSend.CopyTo(buffer, buffer.Length-1);
             int totalSent = 0;  //variable that shows value of number sent data
+            Console.WriteLine(buffer.Length);
             while (totalSent < buffer.Length)   //sending until we have sent all data 
             {
                 int actuallySent = sock.Send(
@@ -26,21 +30,36 @@ namespace X0_Client
         }
         static string Recive(Socket sock) //function that recive data from server
         {
-            byte[] buffer = new byte[18];   //place for bytes that we will get after recive
-            int totalReceived = 0;  //variable that shows value of number recived data
-            while (totalReceived < buffer.Length)   //running until all data will be recive
+            byte[] buffer = new byte[4096];   //place for bytes that we will get after recive
+            int totalReceivedLen = 0;  //variable that shows value of number recived part of data
+            while (totalReceivedLen < 3)   //running until all part of data will be recived
             {
                 int actuallyReceived = sock.Receive(
                 buffer,
-                totalReceived,
-                buffer.Length - totalReceived,
+                totalReceivedLen,
+                buffer.Length - totalReceivedLen,
                 SocketFlags.None
                 );  //reciving data
                 //error there
-                totalReceived += actuallyReceived;  //increasing the value of number recived data
+                Console.WriteLine(Encoding.ASCII.GetString(buffer)); //debug
+                totalReceivedLen += actuallyReceived;  //increasing the value of number recived data
             }
-            Console.WriteLine(Encoding.ASCII.GetString(buffer)); //debug
-            return Encoding.ASCII.GetString(buffer);
+            int realLength = Convert.ToInt32(Encoding.ASCII.GetString(buffer));
+            byte[] realBuffer = new byte[realLength];
+            int totalReceived = 0;
+            while (totalReceived < realLength)   //running until all data will be recive
+            {
+                int actuallyReceived = sock.Receive(
+                realBuffer,
+                totalReceivedLen,
+                realBuffer.Length - totalReceivedLen,
+                SocketFlags.None
+                );  //reciving data
+                //error there
+                Console.WriteLine(Encoding.ASCII.GetString(realBuffer)); //debug
+                totalReceivedLen += actuallyReceived;  //increasing the value of number recived data
+            }
+            return Encoding.ASCII.GetString(realBuffer);
         }
         static void readerOfListOfGames(string text)    //analytic of recived list of games
         {
@@ -119,10 +138,10 @@ namespace X0_Client
                 switch (enteredValue)
                 {
                     case 1: //if person want to create new game
-                        Send("0", sock); // send creat code to server
+                        Send("0|-1", sock); // send creat code to server
                         break;
                     case 2: //if person want to have list of games
-                        Send("1", sock); // send list code to server
+                        Send("1|-1", sock); // send list code to server
                         break;
                     case 3: //if person want to connect to the game
                         Console.WriteLine("Введите id игры: "); //ask game id 
