@@ -73,13 +73,51 @@ namespace X0_Client
             }
             
         }
-        static void Pars(string text)   //function that generate a response
+        static void winResponse(int znach, bool x)
+        {
+            if (x)
+            {
+                if (znach == 1) //  => x is winer1
+                {
+
+                    Console.WriteLine("You win!");
+                }
+                else if (znach == 2) // => y is winer
+                {
+                    Console.WriteLine("You lose!");
+                }
+            }
+            else
+            {
+                if (znach == 1) //  => x is winer1
+                {
+
+                    Console.WriteLine("You lose!");
+                }
+                else if (znach == 2) // => y is winer
+                {
+                    Console.WriteLine("You win!");
+                }
+            }
+        }
+        static void Pars(string text, ref bool X)   //function that generate a response
         {
             string[] message = text.Split('|'); //get value of recived message
             switch (message[0])
             {
                 case "1":   //response if we get id of game(maybe because we ask to create new game or to connect to exist game)
+                    
                     Console.WriteLine(Convert.ToInt32(message[1])); //id output
+                    Console.WriteLine(Convert.ToInt32(message[2])); //x or 0; if 1 => x else if 2 => 0
+                    if (Convert.ToInt32(message[2]) == 1)
+                    {
+                        X = true;
+                    }
+                    else if(Convert.ToInt32(message[2]) == 2)
+                    {
+                        X = false;
+                    }
+
                     break;
                 case "2":   //response if we get list of avaliable games 
                     readerOfListOfGames(message[1]); //game list output
@@ -88,7 +126,10 @@ namespace X0_Client
                     //TODO:Game response
                     break;
                 case "4":   //response if we get information about sb win
-                    //TODO:Win response
+                    winResponse(Convert.ToInt32(message[1]));
+                    break;
+                default:
+                    Console.WriteLine("Error");
                     break;
 
             }
@@ -127,6 +168,7 @@ namespace X0_Client
             IPAddress ip = IPAddress.Parse("127.0.0.1"); //chose ip
             IPEndPoint addr = new IPEndPoint(ip, 1337); //chose addres
             sock.Connect(addr);//connect addres and socket
+            bool x = false;
             int[] map = new int[9]; //creating map of the game (maybe it should be in another class)
             while (true)
             {
@@ -155,10 +197,10 @@ namespace X0_Client
                             Console.WriteLine("Введите id игры: "); //ask game id 
                             id = Convert.ToInt32(Console.ReadLine());//get value of id
                         }
-                        Send(id.ToString(), sock); //send connect code to server
+                        Send($"3|{id.ToString()}", sock); //send connect code to server
                         break;
                 }
-                Pars(Recive(sock)); //recive and generate a response
+                Pars(Recive(sock), x); //recive and generate a response
             }
         }
     }

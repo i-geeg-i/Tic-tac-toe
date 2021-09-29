@@ -113,7 +113,7 @@ namespace X0_Server
                 }
                 else if (comand == 3 && game == null)
                 {
-                    game = KnowledgeCenter.getInstance().FindGame(comand);
+                    game = KnowledgeCenter.getInstance().FindGame(x);
                     Send($"1|{game.id}");
                 }
                 else
