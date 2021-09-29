@@ -11,10 +11,13 @@ namespace X0_Client
 
         static void Send(string text, Socket sock)  //function that send data to server
         {
-            byte[] buffer;  //place for bytes that we will get after encoding text
+            byte[] buffer;
+            byte[] bufferText;
             byte[] dataToSend = Encoding.ASCII.GetBytes(text); //set value for buffer to send to server
-            buffer = Encoding.ASCII.GetBytes(String.Format("{0:000}", dataToSend.Length));
-            dataToSend.CopyTo(buffer, buffer.Length-1);
+            bufferText = Encoding.ASCII.GetBytes(String.Format("{0:000}", dataToSend.Length));
+            buffer = new byte[bufferText.Length + dataToSend.Length];
+            bufferText.CopyTo(buffer, 0);
+            dataToSend.CopyTo(buffer, bufferText.Length);
             int totalSent = 0;  //variable that shows value of number sent data
             Console.WriteLine(buffer.Length);
             while (totalSent < buffer.Length)   //sending until we have sent all data 

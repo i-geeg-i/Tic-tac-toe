@@ -40,10 +40,10 @@ namespace X0_Server
             Random random = new Random();
             return random.Next(10000, 99999); 
         }
-        public void SendAll(Player winer)
+        async public void SendAll(Player winer)
         {
-            player_who_is_0.Send($"4|{winer.Client}");
-            player_who_is_X.Send($"4|{winer.Client}");
+            await player_who_is_0.Send($"4|{winer.Client}");
+            await player_who_is_X.Send($"4|{winer.Client}");
         }
         public bool SetX(int number)
         {
