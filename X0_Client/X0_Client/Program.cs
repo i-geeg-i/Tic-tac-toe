@@ -73,32 +73,16 @@ namespace X0_Client
             }
             
         }
-        static void winResponse(int znach, bool x)
+        static void winResponse(int whoWin, bool x)
         {
-            if (x)
-            {
-                if (znach == 1) //  => x is winer1
-                {
-
-                    Console.WriteLine("You win!");
-                }
-                else if (znach == 2) // => y is winer
-                {
-                    Console.WriteLine("You lose!");
-                }
-            }
-            else
-            {
-                if (znach == 1) //  => x is winer1
-                {
-
-                    Console.WriteLine("You lose!");
-                }
-                else if (znach == 2) // => y is winer
+                if ((x && whoWin == 1) ||(!x && whoWin == 2))
                 {
                     Console.WriteLine("You win!");
                 }
-            }
+                else
+                {
+                    Console.WriteLine("You lose!");
+                }     
         }
         static void Pars(string text, ref bool X)   //function that generate a response
         {
@@ -126,7 +110,7 @@ namespace X0_Client
                     //TODO:Game response
                     break;
                 case "4":   //response if we get information about sb win
-                    winResponse(Convert.ToInt32(message[1]));
+                    winResponse(Convert.ToInt32(message[1]), X);
                     break;
                 default:
                     Console.WriteLine("Error");
