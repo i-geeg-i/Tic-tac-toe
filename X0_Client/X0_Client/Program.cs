@@ -8,8 +8,12 @@ namespace X0_Client
 {
     class Program
     {
-
-        static void Send(string text, Socket sock)  //function that send data to server
+        public static Socket sock = new Socket(
+            AddressFamily.InterNetwork,
+            SocketType.Stream,
+            ProtocolType.Tcp
+            ); //make socket for recive and send
+        public static void Send(string text)  //function that send data to server
         {
             byte[] buffer;
             byte[] bufferText;
@@ -31,7 +35,7 @@ namespace X0_Client
                 totalSent += actuallySent;  //increasing the value of number sent data
             }
         }
-        static string Recive(Socket sock) //function that recive data from server
+        public static string Recive() //function that recive data from server
         {
             byte[] buffer = new byte[4096];   //place for bytes that we will get after recive
             int totalReceivedLen = 0;  //variable that shows value of number recived part of data
@@ -84,7 +88,7 @@ namespace X0_Client
                     Console.WriteLine("You lose!");
                 }     
         }
-        static void Pars(string text, ref bool X)   //function that generate a response
+        public static void Pars(string text, ref bool X)   //function that generate a response
         {
             string[] message = text.Split('|'); //get value of recived message
             switch (message[0])
@@ -142,13 +146,38 @@ namespace X0_Client
                 Console.WriteLine("");//move to next line
             }
         }
+        static int ask(bool x)
+        {
+            if (x) 
+            {
+                Console.WriteLine("Введите номер ячейки в которой хотите поставить X");
+            }
+            else
+            {
+                Console.WriteLine("Введите номер ячейки в которой хотите поставить 0");
+            }
+            
+            int value = Convert.ToInt32(Console.ReadLine());
+            while (value < 1 || value > 10)
+            {
+                Console.WriteLine("Вы ввели не правильное значение!");
+                if (x)
+                {
+                    Console.WriteLine("Введите номер ячейки в которой хотите поставить X");
+                }
+                else
+                {
+                    Console.WriteLine("Введите номер ячейки в которой хотите поставить 0");
+                }
+
+                value = Convert.ToInt32(Console.ReadLine());
+            }
+            return value-1;
+        }
         static void Main(string[] args)
         {
-            Socket sock = new Socket(
-            AddressFamily.InterNetwork, 
-            SocketType.Stream, 
-            ProtocolType.Tcp 
-            ); //make socket for recive and send
+            State ConditionState = new StateOfMenu();
+
             IPAddress ip = IPAddress.Parse("127.0.0.1"); //chose ip
             IPEndPoint addr = new IPEndPoint(ip, 1337); //chose addres
             sock.Connect(addr);//connect addres and socket
@@ -157,41 +186,14 @@ namespace X0_Client
             int[] map = new int[9]; //creating map of the game (maybe it should be in another class)
             while (true)
             {
+                ConditionState.Handle();
                 if (!wePlayNow)
                 {
-                    Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
-                    int enteredValue = Convert.ToInt32(Console.ReadLine()); //get value of person chose
-                    while (enteredValue > 3 || enteredValue < 1) //if value is incorrect
-                    {
-                        Console.WriteLine("Вы ввели некорректное значение"); //person mistake output
-                        Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
-                        enteredValue = Convert.ToInt32(Console.ReadLine());//get value of person chose
-                    }
-                    switch (enteredValue)
-                    {
-                        case 1: //if person want to create new game
-                            Send("0|-1", sock); // send creat code to server
-                            wePlayNow = true;
-                            break;
-                        case 2: //if person want to have list of games
-                            Send("1|-1", sock); // send list code to server
-                            break;
-                        case 3: //if person want to connect to the game
-                            Console.WriteLine("Введите id игры: "); //ask game id 
-                            int id = Convert.ToInt32(Console.ReadLine()); //get value of id
-                            while (id < 10000 || id > 99999) //while id is incorrect
-                            {
-                                Console.WriteLine("Выввели некорректное значение"); //person mistake output
-                                Console.WriteLine("Введите id игры: "); //ask game id 
-                                id = Convert.ToInt32(Console.ReadLine());//get value of id
-                            }
-                            Send($"3|{id.ToString()}", sock); //send connect code to server
-                            break;
-                    }
-                    Pars(Recive(sock),ref x); //recive and generate a response
+                    
                 }
                 else
                 {
+
 
                 }
             }

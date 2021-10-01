@@ -98,6 +98,7 @@ namespace X0_Server
                     Console.WriteLine("0 win!");
                     SendAll(player_who_is_0);
                 }
+                SendAll(map);
                 return true;
             }
             else
