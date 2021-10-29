@@ -8,6 +8,7 @@ namespace X0_Client
 {
     abstract class State
     {
-        public abstract void Handle(Program program);
+        public Program program;
+        public abstract void Handle(Game game);
     }
 }

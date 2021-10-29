@@ -8,7 +8,7 @@ namespace X0_Client
 {
     class StateOfConnecting : State
     {
-        public override void Handle(Program program)
+        public override void Handle(Game game)
         {
             Console.WriteLine("Connecting to the game");
             Console.WriteLine("Введите id игры: "); //ask game id 
@@ -19,7 +19,7 @@ namespace X0_Client
                 Console.WriteLine("Введите id игры: "); //ask game id 
                 id = Convert.ToInt32(Console.ReadLine());//get value of id
             }
-            program.Send($"3|{id.ToString()}"); //send connect code to server
+            game.Send($"3|{id.ToString()}"); //send connect code to server
         }
     }
 }

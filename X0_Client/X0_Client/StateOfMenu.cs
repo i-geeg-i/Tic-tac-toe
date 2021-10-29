@@ -8,7 +8,7 @@ namespace X0_Client
 {
     class StateOfMenu : State
     {
-        public override void Handle(Program program)
+        public override void Handle(Game game)
         {
             Console.WriteLine("Menu");
             Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
@@ -22,17 +22,17 @@ namespace X0_Client
             switch (enteredValue)
             {
                 case 1: //if person want to create new game
-
+                    game.ConditionState = new StateOfNewGame();
                     break;
                 case 2: //if person want to have list of games
-                    
+                    game.ConditionState = new StateOfListOfGames();
                     break;
                 case 3: //if person want to connect to the game
-                    
+                    game.ConditionState = new StateOfConnecting();
                     break;
             }
             
-            program.Pars(Recive(sock), ref x); //recive and generate a response
+            game.Pars(game.Recive(), ref x); //recive and generate a response
         }
     }
 }

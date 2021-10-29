@@ -8,10 +8,11 @@ namespace X0_Client
 {
     class StateOfNewGame : State
     {
-        public override void Handle(Program program)
+        
+        public override void Handle(Game game)
         {
             Console.WriteLine("New game");
-            program.Send("0|-1"); // send creat code to server
+            game.Send("0|-1"); // send creat code to server
         }
     }
 }
