@@ -96,44 +96,7 @@ namespace X0_Client
             {
                 Console.WriteLine("You lose!");
             }
-        }
-        public void Pars(string text, ref bool X)   //function that generate a response
-        {
-            string[] message = text.Split('|'); //get value of recived message
-            switch (message[0])
-            {
-                /////////////////////////////////////////////////////////////////////////////////////
-                //no using
-                case "1":   //response if we get id of game(maybe because we ask to create new game or to connect to exist game)
-
-                    Console.WriteLine(Convert.ToInt32(message[1])); //id output
-                    Console.WriteLine(Convert.ToInt32(message[2])); //x or 0; if 1 => x else if 2 => 0
-                    if (Convert.ToInt32(message[2]) == 1)
-                    {
-                        X = true;
-                    }
-                    else if (Convert.ToInt32(message[2]) == 2)
-                    {
-                        X = false;
-                    }
-
-                    break;
-                case "2":   //response if we get list of avaliable games 
-                    readerOfListOfGames(message[1]); //game list output
-                    break;
-                case "3":   //response if we get some information about game change (for example move)
-                    break;
-                case "4":   //response if we get information about sb win
-                    winResponse(Convert.ToInt32(message[1]), X);
-                    break;
-                default:
-                    Console.WriteLine("Error");
-                    break;
-
-            }
-        }
-       
-        
+        }   
         public void Run()
         {
             while (true)
