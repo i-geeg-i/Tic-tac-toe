@@ -57,20 +57,7 @@ namespace X0_Server
                 totalReceivedLen += actuallyReceived;  //increasing the value of number recived data
             }
             return Encoding.ASCII.GetString(realBuffer);
-        }
-        /*
-        async public void Send(string text)
-        {
-           
-
-            byte[] dataToSend = Encoding.ASCII.GetBytes(text.ToString());
-            byte[] buffer = Encoding.ASCII.GetBytes(String.Format("{0:000}", dataToSend.Length)).Append(dataToSend);
-
-            await Stream.WriteAsync(dataToSend, 0, dataToSend.Length);
-            Console.WriteLine("Sent");
-            
-        }*/
-        
+        }       
         public async Task PlayerHandle()
         {
             while (true)
@@ -101,7 +88,7 @@ namespace X0_Server
                 else if (comand == 1 && game == null)
                 {
                     Send($"2|{KnowledgeCenter.getInstance().GetOpenGames()}");
-                    Console.WriteLine($"2|{KnowledgeCenter.getInstance().GetOpenGames()}".Length * sizeof(Char));
+                    Console.WriteLine($"2|{KnowledgeCenter.getInstance().GetOpenGames()}");
                 }
                 else if (comand == 2 && game != null)
                 {

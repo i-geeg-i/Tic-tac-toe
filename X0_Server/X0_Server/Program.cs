@@ -17,7 +17,7 @@ namespace X0_Server
              * {0 - new game},
              * {1 - list of avaliable games},
              * {2 - move},
-             * {(5 numbers int - id of game)}
+             * {3(5 numbers int - id of game)}
              * )
              * int x 4 
              */ 
