@@ -20,6 +20,26 @@ namespace X0_Client
                 id = Convert.ToInt32(Console.ReadLine());//get value of id
             }
             game.Send($"3|{id.ToString()}"); //send connect code to server
+            Pars(game.Recive());
+            game.ConditionState = new StateOfGame();
+        }
+        void Pars(string text)
+        {
+            string[] message = text.Split('|'); //get value of recived message
+            Console.WriteLine(Convert.ToInt32(message[1])); //id output
+            Console.WriteLine(Convert.ToInt32(message[2])); //x or 0; if 1 => x else if 2 => 0
+            if (Convert.ToInt32(message[2]) == 1)
+            {
+                game.IsWeX = true;
+            }
+            else if (Convert.ToInt32(message[2]) == 2)
+            {
+                game.IsWeX = false;
+            }
+            else
+            {
+                Console.WriteLine("Error");
+            }
         }
     }
 }

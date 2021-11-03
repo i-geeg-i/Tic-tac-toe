@@ -31,8 +31,7 @@ namespace X0_Client
                     game.ConditionState = new StateOfConnecting();
                     break;
             }
-            
-            game.Pars(game.Recive(), ref x); //recive and generate a response
+            //game.Pars(game.Recive(), ref game.IsWeX); //recive and generate a response
         }
     }
 }

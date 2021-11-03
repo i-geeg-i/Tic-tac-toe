@@ -1,26 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace X0_Client
-{class StateOfGame : State
+{
+    class StateOfGame : State
     {
         
         public override void Handle(Game game)
         {
             Console.WriteLine("Game");
             bool play = true;
+            bool turn = game.IsWeX;
             while (play)
             {
-                game.Recive();
                 GameOutput(game.map);
-                int number = Ask(game.IsWeX);
-                game.Send();
+                if (turn)
+                {
+                    int number = Ask(game.IsWeX);
+                    game.Send($"2|{number}");
+                    
+                }
+                Pars(game.Recive());
             }
             
             
+        }
+        void Pars(string text)
+        {
+            string[] message = text.Split('|'); //get value of recived message
+            if (message[0] == "3")
+            {
+                if (game.IsWeX)
+                {
+                    if (message[1] == Game.sock.ToString())//TODO somehow catch movement
+                    {
+                        game.map[Convert.ToInt32(message[2])] = 1;
+                    }
+                    else
+                    {
+                        game.map[Convert.ToInt32(message[2])] = 2;
+                    }
+                }
+                else
+                {
+                    if (message[1] == Game.sock.ToString())//TODO somehow catch movement
+                    {
+                        game.map[Convert.ToInt32(message[2])] = 2;
+                    }
+                    else
+                    {
+                        game.map[Convert.ToInt32(message[2])] = 1;
+                    }
+                }
+
+                
+            }
+            else if(message[0] == "4")
+            {
+                if (message[1] == Game.sock.ToString())//TODO somehow catch movement
+                {
+                    Console.WriteLine("You win!");
+                }
+                else
+                {
+                    Console.WriteLine("You lost!");
+                }
+                game.ConditionState = new StateOfMenu();
+            }
+            else
+            {
+                Console.WriteLine("Error");
+            }
         }
         void GameOutput(int[] map)
         {

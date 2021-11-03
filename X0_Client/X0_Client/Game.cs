@@ -17,7 +17,6 @@ namespace X0_Client
             ProtocolType.Tcp
             ); //make socket for recive and send
         public bool IsWeX = false;
-        bool wePlayNow = false;
         public int[] map = new int[9]; //creating map of the game (maybe it should be in another class)
         public Game(IPEndPoint addr)
         {
@@ -78,7 +77,7 @@ namespace X0_Client
             }
             return Encoding.ASCII.GetString(realBuffer);
         }
-        static void readerOfListOfGames(string text)    //analytic of recived list of games
+        public void readerOfListOfGames(string text)    //analytic of recived list of games
         {
             string[] values = text.Split('.');  //get value of list
             for (int i = 0; i < values.Length; i++)    //go through recived list
@@ -87,7 +86,7 @@ namespace X0_Client
             }
 
         }
-        static void winResponse(int whoWin, bool x)
+        void winResponse(int whoWin, bool x)
         {
             if ((x && whoWin == 1) || (!x && whoWin == 2))
             {
@@ -103,6 +102,8 @@ namespace X0_Client
             string[] message = text.Split('|'); //get value of recived message
             switch (message[0])
             {
+                /////////////////////////////////////////////////////////////////////////////////////
+                //no using
                 case "1":   //response if we get id of game(maybe because we ask to create new game or to connect to exist game)
 
                     Console.WriteLine(Convert.ToInt32(message[1])); //id output
@@ -121,7 +122,6 @@ namespace X0_Client
                     readerOfListOfGames(message[1]); //game list output
                     break;
                 case "3":   //response if we get some information about game change (for example move)
-                    //TODO:Game response
                     break;
                 case "4":   //response if we get information about sb win
                     winResponse(Convert.ToInt32(message[1]), X);

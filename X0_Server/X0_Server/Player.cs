@@ -18,6 +18,7 @@ namespace X0_Server
             Client = client;
             Stream = Client.GetStream();
         }
+        
         async public Task Send(string text)  //function that send data to server
         {
             /*
@@ -86,7 +87,15 @@ namespace X0_Server
                 if (comand == 0 && game == null)
                 {
                     game = new Game(this);
-                    Send($"1|{game.id}");
+                    if(game.player_who_is_X == this)
+                    {
+                        Send($"1|{game.id}|1");
+                    }
+                    else
+                    {
+                        Send($"1|{game.id}|2");
+                    }
+                    
 
                 }
                 else if (comand == 1 && game == null)
@@ -100,7 +109,7 @@ namespace X0_Server
                     {
                         if (game.Set0(x))
                         {
-                            Send($"3|{Client}|{x}");
+                            Send($"3|{Client}|{x}");//TODO client is not avaliable in client app
                         }
                     }
                     else if (game.player_who_is_X == this)
