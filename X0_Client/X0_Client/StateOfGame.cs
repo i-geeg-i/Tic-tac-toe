@@ -9,22 +9,24 @@ namespace X0_Client
 {
     class StateOfGame : State
     {
-        
-        public override void Handle(Game game)
+        public StateOfGame(Game game) : base(game)
+        {
+        }
+        public async override Task Handle()
         {
             Console.WriteLine("Game");
             bool play = true;
-            bool turn = game.IsWeX;
+            bool turn = _game.IsWeX;
             while (play)
             {
-                GameOutput(game.map);
+                GameOutput(_game.map);
                 if (turn)
                 {
-                    int number = Ask(game.IsWeX);
-                    game.Send($"2|{number}");
+                    int number = Ask(_game.IsWeX);
+                    _game.Send($"2|{number}");
                     
                 }
-                Pars(game.Recive());
+                Pars(await _game.Recive());
             }
             
             
@@ -34,26 +36,26 @@ namespace X0_Client
             string[] message = text.Split('|'); //get value of recived message
             if (message[0] == "3")
             {
-                if (game.IsWeX)
+                if (_game.IsWeX)
                 {
                     if (message[1] == Game.sock.ToString())//TODO somehow catch movement
                     {
-                        game.map[Convert.ToInt32(message[2])] = 1;
+                        _game.map[Convert.ToInt32(message[2])] = 1;
                     }
                     else
                     {
-                        game.map[Convert.ToInt32(message[2])] = 2;
+                        _game.map[Convert.ToInt32(message[2])] = 2;
                     }
                 }
                 else
                 {
                     if (message[1] == Game.sock.ToString())//TODO somehow catch movement
                     {
-                        game.map[Convert.ToInt32(message[2])] = 2;
+                        _game.map[Convert.ToInt32(message[2])] = 2;
                     }
                     else
                     {
-                        game.map[Convert.ToInt32(message[2])] = 1;
+                        _game.map[Convert.ToInt32(message[2])] = 1;
                     }
                 }
 
@@ -69,7 +71,7 @@ namespace X0_Client
                 {
                     Console.WriteLine("You lost!");
                 }
-                game.ConditionState = new StateOfMenu();
+                _game.ConditionState = new StateOfMenu(_game);
             }
             else
             {

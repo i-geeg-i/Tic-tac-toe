@@ -10,7 +10,12 @@ namespace X0_Client
 {
     class Game
     {
-        public State ConditionState = new StateOfMenu();
+        public State _ConditionState;
+        public State ConditionState
+        {
+            get { return _ConditionState; }
+            set { _ConditionState = value; }
+        }
         public static Socket sock = new Socket(
             AddressFamily.InterNetwork,
             SocketType.Stream,
@@ -21,8 +26,9 @@ namespace X0_Client
         public Game(IPEndPoint addr)
         {
             sock.Connect(addr);//connect addres and socket
+            ConditionState = new StateOfMenu(this);
         }
-        public void Send(string text)  //function that send data to server
+        public async Task Send(string text)  //function that send data to server
         {
             byte[] buffer;
             byte[] bufferText;
@@ -44,7 +50,7 @@ namespace X0_Client
                 totalSent += actuallySent;  //increasing the value of number sent data
             }
         }
-        public string Recive() //function that recive data from server
+        public async Task<string> Recive() //function that recive data from server
         {
             byte[] buffer = new byte[4096];   //place for bytes that we will get after recive
             int totalReceivedLen = 0;  //variable that shows value of number recived part of data
@@ -77,16 +83,7 @@ namespace X0_Client
             }
             return Encoding.ASCII.GetString(realBuffer);
         }
-        public void readerOfListOfGames(string text)    //analytic of recived list of games
-        {
-            string[] values = text.Split('.');  //get value of list
-            for (int i = 0; i < values.Length; i++)    //go through recived list
-            {
-                Console.WriteLine(values[i]);   //value of list output 
-            }
-
-        }
-        void winResponse(int whoWin, bool x)
+       void winResponse(int whoWin, bool x)
         {
             if ((x && whoWin == 1) || (!x && whoWin == 2))
             {
@@ -101,7 +98,7 @@ namespace X0_Client
         {
             while (true)
             {
-                ConditionState.Handle(this);
+                ConditionState.Handle();
             }
         }
     }

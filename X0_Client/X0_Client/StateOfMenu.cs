@@ -8,7 +8,10 @@ namespace X0_Client
 {
     class StateOfMenu : State
     {
-        public override void Handle(Game game)
+        public StateOfMenu(Game game):base(game)
+        {
+        }
+        public async override Task Handle()
         {
             Console.WriteLine("Menu");
             Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
@@ -22,13 +25,13 @@ namespace X0_Client
             switch (enteredValue)
             {
                 case 1: //if person want to create new game
-                    game.ConditionState = new StateOfNewGame();
+                    _game.ConditionState = new StateOfNewGame(_game);
                     break;
                 case 2: //if person want to have list of games
-                    game.ConditionState = new StateOfListOfGames();
+                    _game.ConditionState = new StateOfListOfGames(_game);
                     break;
                 case 3: //if person want to connect to the game
-                    game.ConditionState = new StateOfConnecting();
+                    _game.ConditionState = new StateOfConnecting(_game);
                     break;
             }
             //game.Pars(game.Recive(), ref game.IsWeX); //recive and generate a response

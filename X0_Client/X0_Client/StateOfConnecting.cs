@@ -8,7 +8,10 @@ namespace X0_Client
 {
     class StateOfConnecting : State
     {
-        public override void Handle(Game game)
+        public StateOfConnecting(Game game) : base(game)
+        {
+        }
+        public async override Task Handle()
         {
             Console.WriteLine("Connecting to the game");
             Console.WriteLine("Введите id игры: "); //ask game id 
@@ -19,9 +22,9 @@ namespace X0_Client
                 Console.WriteLine("Введите id игры: "); //ask game id 
                 id = Convert.ToInt32(Console.ReadLine());//get value of id
             }
-            game.Send($"3|{id.ToString()}"); //send connect code to server
-            Pars(game.Recive());
-            game.ConditionState = new StateOfGame();
+            _game.Send($"3|{id.ToString()}"); //send connect code to server
+            Pars(await _game.Recive());
+            _game.ConditionState = new StateOfGame(_game);
         }
         void Pars(string text)
         {
@@ -30,11 +33,11 @@ namespace X0_Client
             Console.WriteLine(Convert.ToInt32(message[2])); //x or 0; if 1 => x else if 2 => 0
             if (Convert.ToInt32(message[2]) == 1)
             {
-                game.IsWeX = true;
+                _game.IsWeX = true;
             }
             else if (Convert.ToInt32(message[2]) == 2)
             {
-                game.IsWeX = false;
+                _game.IsWeX = false;
             }
             else
             {

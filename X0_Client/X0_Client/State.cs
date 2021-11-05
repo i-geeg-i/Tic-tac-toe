@@ -8,7 +8,11 @@ namespace X0_Client
 {
     abstract class State
     {
-        public Game game;
-        public abstract void Handle(Game game);
+        public Game _game;
+        public abstract Task Handle();
+        public State(Game game)
+        {
+            _game = game;
+        }
     }
 }
