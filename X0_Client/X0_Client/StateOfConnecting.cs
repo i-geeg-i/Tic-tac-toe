@@ -22,7 +22,7 @@ namespace X0_Client
                 Console.WriteLine("Введите id игры: "); //ask game id 
                 id = Convert.ToInt32(Console.ReadLine());//get value of id
             }
-            _game.Send($"3|{id.ToString()}"); //send connect code to server
+            await _game.Send($"3|{id.ToString()}"); //send connect code to server
             Pars(await _game.Recive());
             _game.ConditionState = new StateOfGame(_game);
         }

@@ -23,7 +23,7 @@ namespace X0_Client
                 if (turn)
                 {
                     int number = Ask(_game.IsWeX);
-                    _game.Send($"2|{number}");
+                    await _game.Send($"2|{number}");
                     
                 }
                 Pars(await _game.Recive());

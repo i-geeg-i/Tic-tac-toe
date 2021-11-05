@@ -12,10 +12,7 @@ namespace X0_Client
     {
         public State _ConditionState;
         public State ConditionState
-        {
-            get { return _ConditionState; }
-            set { _ConditionState = value; }
-        }
+        { get; set; }
         public static Socket sock = new Socket(
             AddressFamily.InterNetwork,
             SocketType.Stream,

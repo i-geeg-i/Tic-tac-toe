@@ -14,7 +14,7 @@ namespace X0_Client
         public async override Task Handle()
         {
             Console.WriteLine("New game");
-            _game.Send("0"); // send creat code to server
+            await _game.Send("0"); // send creat code to server
             Pars(await _game.Recive());
             _game.ConditionState = new StateOfGame(_game);
         }
