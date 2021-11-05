@@ -13,17 +13,18 @@ namespace X0_Client
         public State _ConditionState;
         public State ConditionState
         { get; set; }
-        public static Socket sock = new Socket(
-            AddressFamily.InterNetwork,
-            SocketType.Stream,
-            ProtocolType.Tcp
-            ); //make socket for recive and send
+        public Socket sock;
         public bool IsWeX = false;
+        TcpClient client;
+        NetworkStream stream;
         public int[] map = new int[9]; //creating map of the game (maybe it should be in another class)
         public Game(IPEndPoint addr)
         {
-            sock.Connect(addr);//connect addres and socket
+            sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); //make socket for recive and send
+            sock.ConnectAsync(addr);//connect addres and socket
             ConditionState = new StateOfMenu(this);
+            client = new TcpClient("127.0.0.1", 1337);
+            stream = client.GetStream();
         }
         public async Task Send(string text)  //function that send data to server
         {
@@ -35,17 +36,9 @@ namespace X0_Client
             bufferText.CopyTo(buffer, 0);
             dataToSend.CopyTo(buffer, bufferText.Length);
             int totalSent = 0;  //variable that shows value of number sent data
-            Console.WriteLine(buffer.Length);
-            while (totalSent < buffer.Length)   //sending until we have sent all data 
-            {
-                int actuallySent = sock.Send(
-                buffer,
-                totalSent,
-                buffer.Length - totalSent,
-                SocketFlags.None
-                );  //sending data
-                totalSent += actuallySent;  //increasing the value of number sent data
-            }
+            //Console.WriteLine(buffer.Length);
+            await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
+
         }
         public async Task<string> Recive() //function that recive data from server
         {
@@ -53,13 +46,7 @@ namespace X0_Client
             int totalReceivedLen = 0;  //variable that shows value of number recived part of data
             while (totalReceivedLen < 3)   //running until all part of data will be recived
             {
-                int actuallyReceived = sock.Receive(
-                buffer,
-                totalReceivedLen,
-                buffer.Length - totalReceivedLen,
-                SocketFlags.None
-                );  //reciving data
-                //error there
+                int actuallyReceived = await stream.ReadAsync(buffer, totalReceivedLen, buffer.Length - totalReceivedLen);
                 Console.WriteLine(Encoding.ASCII.GetString(buffer)); //debug
                 totalReceivedLen += actuallyReceived;  //increasing the value of number recived data
             }
@@ -68,14 +55,8 @@ namespace X0_Client
             int totalReceived = 0;
             while (totalReceived < realLength)   //running until all data will be recive
             {
-                int actuallyReceived = sock.Receive(
-                realBuffer,
-                totalReceivedLen,
-                realBuffer.Length - totalReceivedLen,
-                SocketFlags.None
-                );  //reciving data
-                //error there
-                Console.WriteLine(Encoding.ASCII.GetString(realBuffer)); //debug
+                int actuallyReceived = await stream.ReadAsync(realBuffer, totalReceivedLen, realBuffer.Length - totalReceivedLen);
+               Console.WriteLine(Encoding.ASCII.GetString(realBuffer)); //debug
                 totalReceivedLen += actuallyReceived;  //increasing the value of number recived data
             }
             return Encoding.ASCII.GetString(realBuffer);

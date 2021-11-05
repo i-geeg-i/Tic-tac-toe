@@ -38,7 +38,7 @@ namespace X0_Client
             {
                 if (_game.IsWeX)
                 {
-                    if (message[1] == Game.sock.ToString())//TODO somehow catch movement
+                    if (message[1] == _game.sock.ToString())//TODO somehow catch movement
                     {
                         _game.map[Convert.ToInt32(message[2])] = 1;
                     }
@@ -49,7 +49,7 @@ namespace X0_Client
                 }
                 else
                 {
-                    if (message[1] == Game.sock.ToString())//TODO somehow catch movement
+                    if (message[1] == _game.sock.ToString())//TODO somehow catch movement
                     {
                         _game.map[Convert.ToInt32(message[2])] = 2;
                     }
@@ -63,7 +63,7 @@ namespace X0_Client
             }
             else if(message[0] == "4")
             {
-                if (message[1] == Game.sock.ToString())//TODO somehow catch movement
+                if (message[1] == _game.sock.ToString())//TODO somehow catch movement
                 {
                     Console.WriteLine("You win!");
                 }

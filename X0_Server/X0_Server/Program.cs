@@ -27,7 +27,6 @@ namespace X0_Server
             while (true)
             {
                 TcpClient client = await server.AcceptTcpClientAsync();
-                NetworkStream stream = client.GetStream();
                 new Player(client).PlayerHandle();
             }
             
