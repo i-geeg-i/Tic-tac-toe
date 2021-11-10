@@ -18,10 +18,8 @@ namespace X0_Client
         TcpClient client;
         NetworkStream stream;
         public int[] map = new int[9]; //creating map of the game (maybe it should be in another class)
-        public Game(IPEndPoint addr)
+        public Game()
         {
-            sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); //make socket for recive and send
-            sock.ConnectAsync(addr);//connect addres and socket
             ConditionState = new StateOfMenu(this);
             client = new TcpClient("127.0.0.1", 1337);
             stream = client.GetStream();
@@ -35,9 +33,7 @@ namespace X0_Client
             buffer = new byte[bufferText.Length + dataToSend.Length];
             bufferText.CopyTo(buffer, 0);
             dataToSend.CopyTo(buffer, bufferText.Length);
-            int totalSent = 0;  //variable that shows value of number sent data
-            //Console.WriteLine(buffer.Length);
-            await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
+            await stream.WriteAsync(buffer, 0, buffer.Length);
 
         }
         public async Task<string> Recive() //function that recive data from server
@@ -72,11 +68,11 @@ namespace X0_Client
                 Console.WriteLine("You lose!");
             }
         }   
-        public void Run()
+        public async Task Run()
         {
             while (true)
             {
-                ConditionState.Handle();
+                await ConditionState.Handle();
             }
         }
     }

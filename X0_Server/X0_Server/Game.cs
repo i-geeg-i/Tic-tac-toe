@@ -19,7 +19,7 @@ namespace X0_Server
             players.Add(FirstPlayer);
             id = CreateId();
         }
-        public int is_Win(int[] map)
+        public int FindWinner(int[] map)
         {
             //TODO: check 
             if (map[0] == 1 && map[1] == 1 && map[2] == 1)
@@ -62,7 +62,7 @@ namespace X0_Server
             if (number >= 0  && number <= 8 && map[number] == 0)
             {
                 map[number] = 1;
-                int winer = is_Win(map);
+                int winer = FindWinner(map);
                 if (winer == 1)
                 {
                     Console.WriteLine("X win!");
@@ -87,7 +87,7 @@ namespace X0_Server
             if (number >= 0 && number <= 8 && map[number] == 0)
             {
                 map[number] = 1;
-                int winer = is_Win(map);
+                int winer = FindWinner(map);
                 if (winer == 1)
                 {
                     Console.WriteLine("X win!");

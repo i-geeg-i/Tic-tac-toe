@@ -15,7 +15,7 @@ namespace X0_Client
         {
             Console.WriteLine("New game");
             await _game.Send("0"); // send creat code to server
-            Pars(await _game.Recive());
+            Pars(await _game.Recive()); //!!!!
             _game.ConditionState = new StateOfGame(_game);
         }
         void Pars(string text)
@@ -34,7 +34,9 @@ namespace X0_Client
             else
             {
                 Console.WriteLine("Error");
+                _game.ConditionState = new StateOfMenu(_game);
             }
+            Console.WriteLine("Connected!");
 
         }
     }

@@ -53,7 +53,7 @@ namespace X0_Server
             {
                 int actuallyReceived = await Stream.ReadAsync(realBuffer, totalReceived, realBuffer.Length - totalReceived);
                 Console.WriteLine(Encoding.ASCII.GetString(realBuffer)); //debug
-                totalReceivedLen += actuallyReceived;  //increasing the value of number recived data
+                totalReceived += actuallyReceived;  //increasing the value of number recived data
             }
             return Encoding.ASCII.GetString(realBuffer);
         }       
@@ -75,18 +75,18 @@ namespace X0_Server
                     game = new Game(this);
                     if(game.player_who_is_X == this)
                     {
-                        Send($"1|{game.id}|1");
+                        await Send($"1|{game.id}|1");
                     }
                     else
                     {
-                        Send($"1|{game.id}|2");
+                        await Send($"1|{game.id}|2");
                     }
                     
 
                 }
                 else if (comand == 1 && game == null)
                 {
-                    Send($"2|{KnowledgeCenter.getInstance().GetOpenGames()}");
+                    await Send($"2|{KnowledgeCenter.getInstance().GetOpenGames()}");
                     Console.WriteLine($"2|{KnowledgeCenter.getInstance().GetOpenGames()}");
                 }
                 else if (comand == 2 && game != null)
@@ -102,37 +102,21 @@ namespace X0_Server
                     {
                         if (game.SetX(x))
                         {
-                            Send($"3|{Client}|{x}");
+                            await Send($"3|{Client}|{x}");
                         }
                     }
                 }
                 else if (comand == 3 && game == null)
                 {
                     game = KnowledgeCenter.getInstance().FindGame(x);
-                    Send($"1|{game.id}");
+                    await Send($"1|{game.id}");
                 }
                 else
                 {
-                    Send($"5");
+                    await Send($"5");
                 }
             }
             Stream.Close();
         }
-    /*
-        async public Task<string> Recive()
-        {
-
-            byte[] dataReceived = new byte[4]; //place for bytes that we will get after recive
-            int totalReceived = 0;  //variable that shows value of number recived data
-            while (totalReceived < dataReceived.Length)   //running until all data will be recive
-            {
-               
-                int actuallyReceived = await Stream.ReadAsync(dataReceived, totalReceived, dataReceived.Length - totalReceived); //reciving data
-                totalReceived += actuallyReceived;  //increasing the value of number recived data
-            }
-            Console.WriteLine(Encoding.ASCII.GetString(dataReceived)); //debug
-            return Encoding.ASCII.GetString(dataReceived); //return of recived string
-        }
-    */
     }
 }

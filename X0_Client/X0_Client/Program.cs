@@ -12,9 +12,7 @@ namespace X0_Client
         
         static void Main(string[] args)
         {
-            IPAddress ip = IPAddress.Parse("127.0.0.1"); //chose ip
-            IPEndPoint addr = new IPEndPoint(ip, 1337); //chose addres
-            new Game(addr).Run();
+            new Game().Run();
         }
     }
 }
