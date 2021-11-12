@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace X0_Client
 {
@@ -10,9 +11,9 @@ namespace X0_Client
     {
         
         
-        static void Main(string[] args)
+        async static Task Main(string[] args)
         {
-            new Game().Run();
+            await new Game().Run();
         }
     }
 }

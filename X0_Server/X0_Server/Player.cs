@@ -42,13 +42,14 @@ namespace X0_Server
             int totalReceivedLen = 0;  //variable that shows value of number recived part of data
             while (totalReceivedLen < 3)   //running until all part of data will be recived
             {
-                int actuallyReceived = await Stream.ReadAsync(buffer, totalReceivedLen, buffer.Length - totalReceivedLen);
+                int actuallyReceived = await Stream.ReadAsync(buffer, totalReceivedLen, 3);
                 Console.WriteLine(Encoding.ASCII.GetString(buffer)); //debug
                 totalReceivedLen += actuallyReceived;  //increasing the value of number recived data
             }
+            
             int realLength = Convert.ToInt32(Encoding.ASCII.GetString(buffer));
             byte[] realBuffer = new byte[realLength];
-            int totalReceived = totalReceivedLen;
+            int totalReceived = 0;
             while (totalReceived < realLength)   //running until all data will be recive
             {
                 int actuallyReceived = await Stream.ReadAsync(realBuffer, totalReceived, realBuffer.Length - totalReceived);

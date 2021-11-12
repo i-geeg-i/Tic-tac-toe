@@ -10,7 +10,8 @@ namespace X0_Client
 {
     class Game
     {
-        public State _ConditionState;
+        public State _ConditionState
+        { get; set; }
         public State ConditionState
         { get; set; }
         public Socket sock;
@@ -42,7 +43,7 @@ namespace X0_Client
             int totalReceivedLen = 0;  //variable that shows value of number recived part of data
             while (totalReceivedLen < 3)   //running until all part of data will be recived
             {
-                int actuallyReceived = await stream.ReadAsync(buffer, totalReceivedLen, buffer.Length - totalReceivedLen);
+                int actuallyReceived = await stream.ReadAsync(buffer, totalReceivedLen, buffer.Length -1 - totalReceivedLen);
                 Console.WriteLine(Encoding.ASCII.GetString(buffer)); //debug
                 totalReceivedLen += actuallyReceived;  //increasing the value of number recived data
             }
