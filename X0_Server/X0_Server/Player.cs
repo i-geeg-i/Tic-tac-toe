@@ -31,7 +31,7 @@ namespace X0_Server
             byte[] buffer;  //place for bytes that we will get after encoding text
             byte[] dataToSend = Encoding.ASCII.GetBytes(text); //set value for buffer to send to server
             buffer = Encoding.ASCII.GetBytes(String.Format("{0:000}", dataToSend.Length));
-            dataToSend.CopyTo(buffer, 3);
+            dataToSend.CopyTo(buffer, 3);//some problems
             Console.WriteLine(buffer.Length);
             await Stream.WriteAsync(buffer, 0, dataToSend.Length);
 
@@ -65,7 +65,11 @@ namespace X0_Server
                 string recivedString =  await Recive();
                 string[] recivedValues = recivedString.Split('|');
                 int comand = Convert.ToInt32(recivedValues[0]);
-                int x = Convert.ToInt32(recivedValues[1]);
+                int x = -1;
+                if(recivedValues.Length > 1)
+                {
+                    x = Convert.ToInt32(recivedValues[1]);
+                }
                 Dictionary<TcpClient,Player> players = KnowledgeCenter.getInstance().players;
                 if (!players.ContainsKey(Client))
                 {
