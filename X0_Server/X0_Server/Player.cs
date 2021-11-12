@@ -28,12 +28,13 @@ namespace X0_Server
             * {3} - movement of someone
             * {4} - someone is winer
             */
-            byte[] buffer;  //place for bytes that we will get after encoding text
-            byte[] dataToSend = Encoding.ASCII.GetBytes(text); //set value for buffer to send to server
-            buffer = Encoding.ASCII.GetBytes(String.Format("{0:000}", dataToSend.Length));
-            dataToSend.CopyTo(buffer, 3);//some problems
-            Console.WriteLine(buffer.Length);
-            await Stream.WriteAsync(buffer, 0, dataToSend.Length);
+            byte[] bufferLen;  //place for bytes that we will get after encoding text
+            byte[] dataToSendFromUser = Encoding.ASCII.GetBytes(text); //set value for buffer to send to server
+            bufferLen = Encoding.ASCII.GetBytes(String.Format("{0:000}", dataToSendFromUser.Length));
+            byte[] Result = new byte[bufferLen.Length + dataToSendFromUser.Length];
+            bufferLen.CopyTo(Result, 0);
+            dataToSendFromUser.CopyTo(Result, bufferLen.Length);
+            await Stream.WriteAsync(Result, 0, Result.Length);
 
         }
         async public Task<string> Recive() //function that recive data from server

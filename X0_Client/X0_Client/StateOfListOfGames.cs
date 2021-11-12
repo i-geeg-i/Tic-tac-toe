@@ -32,7 +32,8 @@ namespace X0_Client
         }
         void readerOfListOfGames(string text)    //analytic of recived list of games
         {
-            string[] values = text.Split('.');  //get value of list
+            string[] message = text.Split('|');
+            string[] values = message[1].Split('.');  //get value of list
             for (int i = 0; i < values.Length; i++)    //go through recived list
             {
                 Console.WriteLine(values[i]);   //value of list output 

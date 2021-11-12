@@ -25,40 +25,40 @@ namespace X0_Client
             client = new TcpClient("127.0.0.1", 1337);
             stream = client.GetStream();
         }
-        public async Task Send(string text)  //function that send data to server
+        async public Task Send(string text)  //function that send data to server
         {
-            byte[] buffer;
-            byte[] bufferText;
-            byte[] dataToSend = Encoding.ASCII.GetBytes(text); //set value for buffer to send to server
-            bufferText = Encoding.ASCII.GetBytes(String.Format("{0:000}", dataToSend.Length));
-            buffer = new byte[bufferText.Length + dataToSend.Length];
-            bufferText.CopyTo(buffer, 0);
-            dataToSend.CopyTo(buffer, bufferText.Length);
-            await stream.WriteAsync(buffer, 0, buffer.Length);
+            byte[] bufferLen;  //place for bytes that we will get after encoding text
+            byte[] dataToSendFromUser = Encoding.ASCII.GetBytes(text); //set value for buffer to send to server
+            bufferLen = Encoding.ASCII.GetBytes(String.Format("{0:000}", dataToSendFromUser.Length));
+            byte[] Result = new byte[bufferLen.Length + dataToSendFromUser.Length];
+            bufferLen.CopyTo(Result, 0);
+            dataToSendFromUser.CopyTo(Result, bufferLen.Length);
+            await stream.WriteAsync(Result, 0, Result.Length);
 
         }
-        public async Task<string> Recive() //function that recive data from server
+        async public Task<string> Recive() //function that recive data from server
         {
             byte[] buffer = new byte[4096];   //place for bytes that we will get after recive
             int totalReceivedLen = 0;  //variable that shows value of number recived part of data
             while (totalReceivedLen < 3)   //running until all part of data will be recived
             {
-                int actuallyReceived = await stream.ReadAsync(buffer, totalReceivedLen, buffer.Length -1 - totalReceivedLen);
+                int actuallyReceived = await stream.ReadAsync(buffer, totalReceivedLen, 3);
                 Console.WriteLine(Encoding.ASCII.GetString(buffer)); //debug
                 totalReceivedLen += actuallyReceived;  //increasing the value of number recived data
             }
+
             int realLength = Convert.ToInt32(Encoding.ASCII.GetString(buffer));
             byte[] realBuffer = new byte[realLength];
             int totalReceived = 0;
             while (totalReceived < realLength)   //running until all data will be recive
             {
-                int actuallyReceived = await stream.ReadAsync(realBuffer, totalReceivedLen, realBuffer.Length - totalReceivedLen);
-               Console.WriteLine(Encoding.ASCII.GetString(realBuffer)); //debug
-                totalReceivedLen += actuallyReceived;  //increasing the value of number recived data
+                int actuallyReceived = await stream.ReadAsync(realBuffer, totalReceived, realBuffer.Length - totalReceived);
+                Console.WriteLine(Encoding.ASCII.GetString(realBuffer)); //debug
+                totalReceived += actuallyReceived;  //increasing the value of number recived data
             }
             return Encoding.ASCII.GetString(realBuffer);
         }
-       void winResponse(int whoWin, bool x)
+        void winResponse(int whoWin, bool x)
         {
             if ((x && whoWin == 1) || (!x && whoWin == 2))
             {

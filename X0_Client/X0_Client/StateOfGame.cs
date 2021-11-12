@@ -26,6 +26,7 @@ namespace X0_Client
                     await _game.Send($"2|{number}");
                     
                 }
+                Console.WriteLine("Waiting for enemy..."); ///TODO somehow make beter
                 Pars(await _game.Recive());
             }
             

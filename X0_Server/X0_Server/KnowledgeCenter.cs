@@ -34,7 +34,7 @@ namespace X0_Server
         }
         public string GetOpenGames()
         {
-            string toReturn = "";
+            string toReturn = "-1";
             for (int i = 0; i < games.Count; i++)
             {
                 if (!games[i].started && games[i].player_who_is_X == null && games[i].player_who_is_0 == null)
