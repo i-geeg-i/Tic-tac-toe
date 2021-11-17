@@ -16,11 +16,13 @@ namespace X0_Client
             Console.WriteLine("Menu");
             Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
             int enteredValue = Convert.ToInt32(Console.ReadLine()); //get value of person chose
+            Console.WriteLine("-----");
             while (enteredValue > 3 || enteredValue < 1) //if value is incorrect
             {
                 Console.WriteLine("Вы ввели некорректное значение"); //person mistake output
                 Console.WriteLine("1 - новая игра\n2 - список игр\n3 - подключиться к игре");//game menu output
                 enteredValue = Convert.ToInt32(Console.ReadLine());//get value of person chose
+                Console.WriteLine("-----");
             }
             switch (enteredValue)
             {
@@ -31,7 +33,7 @@ namespace X0_Client
                     _game.ConditionState = new StateOfListOfGames(_game);
                     break;
                 case 3: //if person want to connect to the game
-                    _game.ConditionState = new StateOfConnecting(_game);
+                    _game.ConditionState = new StateOfConnectingToGame(_game);
                     break;
             }
             //game.Pars(game.Recive(), ref game.IsWeX); //recive and generate a response

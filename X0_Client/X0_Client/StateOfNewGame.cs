@@ -15,14 +15,13 @@ namespace X0_Client
         {
             Console.WriteLine("New game");
             await _game.Send("0"); // send creat code to server
-            Pars(await _game.Recive()); //!!!!
+            Pars(await _game.Recive());
             _game.ConditionState = new StateOfGame(_game);
         }
-        void Pars(string text)
+        private void Pars(string text)
         {
             string[] message = text.Split('|'); //get value of recived message
-            Console.WriteLine(Convert.ToInt32(message[1])); //id output
-            Console.WriteLine(Convert.ToInt32(message[2])); //x or 0; if 1 => x else if 2 => 0
+            Console.WriteLine($"id: {Convert.ToInt32(message[1])}"); //id output
             if (Convert.ToInt32(message[2]) == 1)
             {
                 _game.IsWeX = true;
@@ -33,11 +32,11 @@ namespace X0_Client
             }
             else
             {
-                Console.WriteLine("Error");
+                Console.WriteLine("Ошибка!");
                 _game.ConditionState = new StateOfMenu(_game);
             }
-            Console.WriteLine("Connected!");
-
+            Console.WriteLine("Подключено!");
+            Console.WriteLine("-----");
         }
     }
 }

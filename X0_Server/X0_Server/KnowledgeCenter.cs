@@ -12,16 +12,28 @@ namespace X0_Server
         private static KnowledgeCenter instance;
         public List<Game> games = new List<Game>();
         public Dictionary<TcpClient,Player> players = new Dictionary<TcpClient, Player>();
+
         private KnowledgeCenter()
         { }
-
         public static KnowledgeCenter getInstance()
         {
             if (instance == null)
                 instance = new KnowledgeCenter();
             return instance;
         }
-        public Game FindGame(int id)
+        public int GetId()
+        {
+            int id = -1;
+            foreach (KeyValuePair<TcpClient, Player> kvp in players)
+            {
+                if(kvp.Value.id > id)
+                {
+                    id = kvp.Value.id;
+                }
+            }
+            return id + 1;
+        }
+        public Game FindGame(int id, Player player)
         {
             for (int i = 0; i < games.Count; i++)
             {
@@ -30,14 +42,14 @@ namespace X0_Server
                     return games[i];
                 }
             }
-            return new Game(new Player(new System.Net.Sockets.TcpClient()));
+            return new Game(player);
         }
         public string GetOpenGames()
         {
-            string toReturn = "-1";
+            string toReturn = "0.";
             for (int i = 0; i < games.Count; i++)
             {
-                if (!games[i].started && games[i].player_who_is_X == null && games[i].player_who_is_0 == null)
+                if (!games[i].started && (games[i].player_who_is_X == null || games[i].player_who_is_0 == null))
                 {
                     if(i != games.Count - 1)
                     {

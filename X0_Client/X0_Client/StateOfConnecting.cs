@@ -13,36 +13,27 @@ namespace X0_Client
         }
         public async override Task Handle()
         {
-            Console.WriteLine("Connecting to the game");
-            Console.WriteLine("Введите id игры: "); //ask game id 
-            int id = Convert.ToInt32(Console.ReadLine()); //get value of id
-            while (id < 10000 || id > 99999) //while id is incorrect
-            {
-                Console.WriteLine("Выввели некорректное значение"); //person mistake output
-                Console.WriteLine("Введите id игры: "); //ask game id 
-                id = Convert.ToInt32(Console.ReadLine());//get value of id
-            }
-            await _game.Send($"3|{id.ToString()}"); //send connect code to server
+           await _game.Send($"555"); //send connect code to server
             Pars(await _game.Recive());
-            _game.ConditionState = new StateOfGame(_game);
+            _game.ConditionState = new StateOfMenu(_game);
         }
-        void Pars(string text)
+        private void Pars(string text)
         {
             string[] message = text.Split('|'); //get value of recived message
-            Console.WriteLine(Convert.ToInt32(message[1])); //id output
-            Console.WriteLine(Convert.ToInt32(message[2])); //x or 0; if 1 => x else if 2 => 0
-            if (Convert.ToInt32(message[2]) == 1)
+            Console.WriteLine(Convert.ToInt32(message[0])); //id output
+            if (message[0] == "666")
             {
-                _game.IsWeX = true;
+                return;
             }
-            else if (Convert.ToInt32(message[2]) == 2)
+            else if (Convert.ToInt32(message[0]) == 6)
             {
-                _game.IsWeX = false;
+                _game.Id = Convert.ToInt32(message[1]);
             }
             else
             {
-                Console.WriteLine("Error");
+                Console.WriteLine("Ошибка!");
             }
+
         }
     }
 }

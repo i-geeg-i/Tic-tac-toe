@@ -14,10 +14,49 @@ namespace X0_Server
         private int[] map = new int[9];
         public int id { get; }
         public bool started { get; set; } = false;
+        public bool xMove = true;
         public Game(Player FirstPlayer)
         {
-            players.Add(FirstPlayer);
             id = CreateId();
+            AddPlayer(FirstPlayer);            
+        }
+        public async Task AddPlayer(Player player)
+        {
+            if(players.Count < 2)
+            {
+                players.Add(player);
+            }
+            if (players.Count == 1)
+            {
+                
+                Random random = new Random();
+                
+                if (random.Next(0, 1) == 0)
+                {
+                    player_who_is_X = player;
+                    await player.Send($"1|{id}|1");
+                }
+                else
+                {
+                    player_who_is_0 = player;
+                    await player.Send($"1|{id}|2");
+                } 
+            }
+            else if(players.Count == 2)
+            {
+                if(player_who_is_X == null)
+                {
+                    player_who_is_X = player;
+                    await player.Send($"1|{id}|1");
+                }
+                else
+                {
+                    player_who_is_0 = player;
+                    await player.Send($"1|{id}|2");
+                }
+                started = true;
+                SendAll();
+            }
         }
         public int FindWinner(int[] map)
         {
@@ -40,12 +79,17 @@ namespace X0_Server
             Random random = new Random();
             return random.Next(10000, 99999); 
         }
-        async public void SendAll(Player winer)
+        public async void SendAll()
         {
-            await player_who_is_0.Send($"4|{winer.Client}");
-            await player_who_is_X.Send($"4|{winer.Client}");
+            await player_who_is_0.Send("5");
+            await player_who_is_X.Send("5");
         }
-        async public void SendAll(int[] map)
+        public async void SendAll(Player winer)
+        {
+            await player_who_is_0.Send($"4|{winer.id}");
+            await player_who_is_X.Send($"4|{winer.id}");
+        }
+        public async void SendAll(Player playerWhoMove, int numberOfCell)
         {
             string movement = "";
             for (int i = 0; i < map.Length-1; i++)
@@ -54,10 +98,10 @@ namespace X0_Server
                 movement += ".";
             }
             movement += map[map.Length-1].ToString();
-            await player_who_is_0.Send($"3|{movement}");
-            await player_who_is_X.Send($"3|{movement}");
+            await player_who_is_0.Send($"3|{playerWhoMove.id}|{numberOfCell}");
+            await player_who_is_X.Send($"3|{playerWhoMove.id}|{numberOfCell}");
         }
-        public bool SetX(int number)
+        public async Task SetX(int number)
         {
             if (number >= 0  && number <= 8 && map[number] == 0)
             {
@@ -73,21 +117,18 @@ namespace X0_Server
                     Console.WriteLine("0 win!");
                     SendAll(player_who_is_0);
                 }
-                SendAll(map);
-                return true;
-            }
-            else
-            {
-                return false;
+                SendAll(player_who_is_X,number);
+                xMove = !xMove;
             }
         }
 
-        public bool Set0(int number)
+        public async Task Set0(int number)
         {
             if (number >= 0 && number <= 8 && map[number] == 0)
             {
-                map[number] = 1;
+                map[number] = 2;
                 int winer = FindWinner(map);
+                SendAll(player_who_is_0, number);
                 if (winer == 1)
                 {
                     Console.WriteLine("X win!");
@@ -98,12 +139,7 @@ namespace X0_Server
                     Console.WriteLine("0 win!");
                     SendAll(player_who_is_0);
                 }
-                SendAll(map);
-                return true;
-            }
-            else
-            {
-                return false;
+                xMove = !xMove;
             }
         }
     }

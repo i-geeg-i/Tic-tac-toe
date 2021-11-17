@@ -17,8 +17,8 @@ namespace X0_Client
             await _game.Send("1"); // send list code to server
             Pars(await _game.Recive());
             _game.ConditionState = new StateOfMenu(_game);
-        }  
-        void Pars(string text)
+        }
+        private void Pars(string text)
         {
             string[] message = text.Split('|'); //get value of recived message
             if(message[0] == "2")
@@ -30,15 +30,21 @@ namespace X0_Client
                 Console.WriteLine("Error");
             }
         }
-        void readerOfListOfGames(string text)    //analytic of recived list of games
+        private void readerOfListOfGames(string text)    //analytic of recived list of games
         {
-            string[] message = text.Split('|');
-            string[] values = message[1].Split('.');  //get value of list
-            for (int i = 0; i < values.Length; i++)    //go through recived list
+            string[] values = text.Split('.');  //get value of list
+            if (values.Length == 2 && values[1] == "")
             {
-                Console.WriteLine(values[i]);   //value of list output 
+                Console.WriteLine("В данный момент нет доступных игр!");
+                Console.WriteLine("-----");
+                return;
             }
-
+            Console.WriteLine("Игры:");
+            for (int i = 1; i < values.Length; i++)    //go through recived list
+            {
+                Console.WriteLine($"{i}. { values[i]}");   //value of list output 
+            }
+            Console.WriteLine("-----");
         }
     }
 }

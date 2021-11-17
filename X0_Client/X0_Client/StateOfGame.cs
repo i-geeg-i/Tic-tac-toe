@@ -9,37 +9,45 @@ namespace X0_Client
 {
     class StateOfGame : State
     {
+        private bool play = false;
         public StateOfGame(Game game) : base(game)
         {
         }
+        private bool turn;
         public async override Task Handle()
         {
-            Console.WriteLine("Game");
-            bool play = true;
-            bool turn = _game.IsWeX;
+            Console.WriteLine("Game"); 
+            turn = _game.IsWeX;
+            Console.WriteLine("Ожидание подключения противника..."); //TODO somehow make beter output
+            Pars(await _game.Recive());
+            GameOutput(_game.map);
             while (play)
             {
-                GameOutput(_game.map);
+                
                 if (turn)
                 {
                     int number = Ask(_game.IsWeX);
                     await _game.Send($"2|{number}");
                     
                 }
-                Console.WriteLine("Waiting for enemy..."); ///TODO somehow make beter
+                else
+                {
+                    Console.WriteLine("Ждём ход противника..."); //TODO somehow make beter
+                }
                 Pars(await _game.Recive());
+                GameOutput(_game.map);
             }
-            
-            
+            Console.WriteLine("-----");
+
         }
-        void Pars(string text)
+        private void Pars(string text)
         {
             string[] message = text.Split('|'); //get value of recived message
             if (message[0] == "3")
             {
                 if (_game.IsWeX)
                 {
-                    if (message[1] == _game.sock.ToString())//TODO somehow catch movement
+                    if (message[1] == _game.Id.ToString())
                     {
                         _game.map[Convert.ToInt32(message[2])] = 1;
                     }
@@ -50,7 +58,7 @@ namespace X0_Client
                 }
                 else
                 {
-                    if (message[1] == _game.sock.ToString())//TODO somehow catch movement
+                    if (message[0] == _game.Id.ToString())
                     {
                         _game.map[Convert.ToInt32(message[2])] = 2;
                     }
@@ -59,51 +67,69 @@ namespace X0_Client
                         _game.map[Convert.ToInt32(message[2])] = 1;
                     }
                 }
-
-                
+                if(message[1] == _game.Id.ToString())
+                {
+                    turn = false;
+                }
+                else
+                {
+                    turn = true;
+                }
             }
             else if(message[0] == "4")
             {
-                if (message[1] == _game.sock.ToString())//TODO somehow catch movement
+                if (message[1] == _game.Id.ToString())//TODO somehow catch movement
                 {
-                    Console.WriteLine("You win!");
+                    Console.WriteLine("Вы выиграли!");
                 }
                 else
                 {
-                    Console.WriteLine("You lost!");
+                    Console.WriteLine("Вы проиграли!");
                 }
+                play = false;
                 _game.ConditionState = new StateOfMenu(_game);
+            }
+            else if(message[0] == "5")
+            {
+                play = true;
             }
             else
             {
-                Console.WriteLine("Error");
+                Console.WriteLine("Ошибка!");
             }
         }
-        void GameOutput(int[] map)
+        private void GameOutput(int[] map)
         {
-            for (int lineNumber = 0; lineNumber < 3; lineNumber++)//go throught lines
+            int turnOfPrint = 0;
+            for (int i = 0; i < 9; i++)//go throught lines
             {
-                Console.Write("|");
-                for (int columnNumber = 0; columnNumber < 3; columnNumber++)//go throught columns
+                if(turnOfPrint == 0)
                 {
-                    if (map[lineNumber + columnNumber] == 1) //if unit equal number of X
-                    {
-                        Console.Write("X|"); //X output
-                    }
-                    else if (map[lineNumber + columnNumber] == 2)//if unit equal number of 0
-                    {
-                        Console.Write("0|");//0 output
-                    }
-                    else //if unit is empty
-                    {
-                        Console.Write($" |");//empty output
-                    }
-
+                    Console.Write("|");
                 }
-                Console.WriteLine("");//move to next line
+                
+                if (map[i] == 1) //if unit equal number of X
+                {
+                    Console.Write("X|"); //X output
+                }
+                else if (map[i] == 2)//if unit equal number of 0
+                {
+                    Console.Write("0|");//0 output
+                }
+                else //if unit is empty
+                {
+                    Console.Write($" |");//empty output
+                }
+                turnOfPrint++;
+                if(turnOfPrint == 3)
+                {
+                    Console.WriteLine("");//move to next line
+                    turnOfPrint = 0;
+                }
+               
             }
         }
-        int Ask(bool x)
+        private int Ask(bool x)
         {
             if (x)
             {
