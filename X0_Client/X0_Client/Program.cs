@@ -11,7 +11,7 @@ namespace X0_Client
     {
         
         
-        async static Task Main(string[] args)
+        private async static Task Main(string[] args)
         {
             await new Game().Run();
         }

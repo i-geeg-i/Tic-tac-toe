@@ -21,18 +21,24 @@ namespace X0_Client
         private void Pars(string text)
         {
             string[] message = text.Split('|'); //get value of recived message
-            if(message[0] == "2")
+            string RecivedCodeOfAnswer = message[0];
+            string RecivedListOfGamesInTextFormat = message[1];
+            if (RecivedCodeOfAnswer == "2")
             {
-                 readerOfListOfGames(message[1]);
+                 readerOfListOfGames(GetListOfGames(RecivedListOfGamesInTextFormat));
             }
             else 
             {
                 Console.WriteLine("Error");
             }
         }
-        private void readerOfListOfGames(string text)    //analytic of recived list of games
+        private string[] GetListOfGames(string text)
         {
             string[] values = text.Split('.');  //get value of list
+            return values;
+        }
+        private void readerOfListOfGames(string[] values)    //analytic of recived list of games
+        {
             if (values.Length == 2 && values[1] == "")
             {
                 Console.WriteLine("В данный момент нет доступных игр!");

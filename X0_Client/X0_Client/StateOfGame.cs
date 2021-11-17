@@ -9,7 +9,7 @@ namespace X0_Client
 {
     class StateOfGame : State
     {
-        private bool play = false;
+        private bool play = true;
         public StateOfGame(Game game) : base(game)
         {
         }
@@ -18,8 +18,6 @@ namespace X0_Client
         {
             Console.WriteLine("Game"); 
             turn = _game.IsWeX;
-            Console.WriteLine("Ожидание подключения противника..."); //TODO somehow make beter output
-            Pars(await _game.Recive());
             GameOutput(_game.map);
             while (play)
             {
@@ -28,22 +26,21 @@ namespace X0_Client
                 {
                     int number = Ask(_game.IsWeX);
                     await _game.Send($"2|{number}");
-                    
                 }
                 else
                 {
-                    Console.WriteLine("Ждём ход противника..."); //TODO somehow make beter
+                    Console.WriteLine("Ждём ход противника...");
                 }
                 Pars(await _game.Recive());
                 GameOutput(_game.map);
             }
             Console.WriteLine("-----");
-
         }
         private void Pars(string text)
         {
             string[] message = text.Split('|'); //get value of recived message
-            if (message[0] == "3")
+            string answerCode = message[0];
+            if (answerCode == "3")
             {
                 if (_game.IsWeX)
                 {
@@ -58,7 +55,7 @@ namespace X0_Client
                 }
                 else
                 {
-                    if (message[0] == _game.Id.ToString())
+                    if (answerCode == _game.Id.ToString())
                     {
                         _game.map[Convert.ToInt32(message[2])] = 2;
                     }
@@ -76,7 +73,7 @@ namespace X0_Client
                     turn = true;
                 }
             }
-            else if(message[0] == "4")
+            else if(answerCode == "4")
             {
                 if (message[1] == _game.Id.ToString())//TODO somehow catch movement
                 {
@@ -89,16 +86,16 @@ namespace X0_Client
                 play = false;
                 _game.ConditionState = new StateOfMenu(_game);
             }
-            else if(message[0] == "5")
+            else if(answerCode == "7")
             {
-                play = true;
+                Console.WriteLine("Игра закончилась ничьёй!");
             }
             else
             {
                 Console.WriteLine("Ошибка!");
             }
         }
-        private void GameOutput(int[] map)
+    private void GameOutput(int[] map)
         {
             int turnOfPrint = 0;
             for (int i = 0; i < 9; i++)//go throught lines
@@ -126,7 +123,6 @@ namespace X0_Client
                     Console.WriteLine("");//move to next line
                     turnOfPrint = 0;
                 }
-               
             }
         }
         private int Ask(bool x)
@@ -139,7 +135,6 @@ namespace X0_Client
             {
                 Console.WriteLine("Введите номер ячейки в которой хотите поставить 0");
             }
-
             int value = Convert.ToInt32(Console.ReadLine());
             while (value < 1 || value > 10)
             {
@@ -157,8 +152,5 @@ namespace X0_Client
             }
             return value - 1;
         }
-
-
     }
-    
 }

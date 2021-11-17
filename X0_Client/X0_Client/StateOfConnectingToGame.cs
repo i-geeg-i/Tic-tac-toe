@@ -26,7 +26,7 @@ namespace X0_Client
             }
             await _game.Send($"3|{id.ToString()}"); //send connect code to server
             Pars(await _game.Recive());
-            _game.ConditionState = new StateOfGame(_game);
+            _game.ConditionState = new StateOfWating(_game);
         }
         private void Pars(string text)
         {

@@ -36,7 +36,6 @@ namespace X0_Client
                     _game.ConditionState = new StateOfConnectingToGame(_game);
                     break;
             }
-            //game.Pars(game.Recive(), ref game.IsWeX); //recive and generate a response
         }
     }
 }

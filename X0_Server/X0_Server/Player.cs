@@ -31,6 +31,7 @@ namespace X0_Server
             * {4} - someone is winer
             * {5} - game started
             * {6} - new user
+            * {7} - draw
             */
             byte[] bufferLen;  //place for bytes that we will get after encoding text
             byte[] dataToSendFromUser = Encoding.ASCII.GetBytes(text); //set value for buffer to send to server
@@ -125,37 +126,6 @@ namespace X0_Server
                 } 
             }
             Stream.Close();
-        }
-        private void GameOutput(int[] map)
-        {
-            int turnOfPrint = 0;
-            for (int i = 0; i < 9; i++)//go throught lines
-            {
-                if (turnOfPrint == 0)
-                {
-                    Console.Write("|");
-                }
-
-                if (map[i] == 1) //if unit equal number of X
-                {
-                    Console.Write("X|"); //X output
-                }
-                else if (map[i] == 2)//if unit equal number of 0
-                {
-                    Console.Write("0|");//0 output
-                }
-                else //if unit is empty
-                {
-                    Console.Write($" |");//empty output
-                }
-                turnOfPrint++;
-                if (turnOfPrint == 3)
-                {
-                    Console.WriteLine("");//move to next line
-                    turnOfPrint = 0;
-                }
-
-            }
         }
     }
 }
