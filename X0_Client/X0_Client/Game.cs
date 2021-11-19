@@ -10,8 +10,6 @@ namespace X0_Client
 {
     class Game
     {
-        public State _ConditionState
-        { get; set; }
         public State ConditionState
         { get; set; }
         public bool IsWeX = false;

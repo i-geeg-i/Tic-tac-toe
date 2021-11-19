@@ -30,6 +30,7 @@ namespace X0_Client
                 else
                 {
                     Console.WriteLine("Ждём ход противника...");
+                    turn = !turn;
                 }
                 Pars(await _game.Recive());
                 GameOutput(_game.map);

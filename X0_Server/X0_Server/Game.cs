@@ -55,7 +55,7 @@ namespace X0_Server
                     await player.Send($"1|{id}|2");
                 }
                 started = true;
-                await SendAll();
+                await SendAllAboutConnection();
             }
         }
         private int FindWinner(int[] map)
@@ -79,28 +79,32 @@ namespace X0_Server
             Random random = new Random();
             return random.Next(10000, 99999); 
         }
-        private async Task SendAll()
+        private async Task SendAllAboutConnection()
         {
             var tasks = new Task[2];
-            tasks[0] = player_who_is_X.Send("5"); //Can it be like this?
-            tasks[1] = player_who_is_0.Send("5");
+            tasks[0] = player_who_is_X.Send("5|"); 
+            tasks[1] = player_who_is_0.Send("5|");
+            Task.WaitAll(tasks);
+            foreach (var task in tasks)
+            {
+                Console.WriteLine(task.Status);
+            }
+        }
+        private async Task SendAllAboutDraw()
+        { 
+            var tasks = new Task[2];
+            tasks[0] = player_who_is_0.Send($"7|"); 
+            tasks[1] = player_who_is_X.Send($"7|");
             Task.WaitAll(tasks);
         }
-        private async Task SendAllMessageAboutDraw() //!!!
+        private async Task SendAllAboutWinner(Player winer)
         {
             var tasks = new Task[2];
-            tasks[0] = player_who_is_0.Send($"7"); //Can it be like this?
-            tasks[1] = player_who_is_X.Send($"7");
-            Task.WaitAll(tasks);
-        }
-        private async Task SendAll(Player winer)
-        {
-            var tasks = new Task[2];
-            tasks[0] = player_who_is_0.Send($"4|{winer.id}"); //Can it be like this?
+            tasks[0] = player_who_is_0.Send($"4|{winer.id}");
             tasks[1] = player_who_is_X.Send($"4|{winer.id}");
             Task.WaitAll(tasks);
         }
-        private async Task SendAll(Player playerWhoMove, int numberOfCell)
+        private async Task SendAllMovement(Player playerWhoMove, int numberOfCell)
         {
             string movement = "";
             for (int i = 0; i < map.Length-1; i++)
@@ -123,14 +127,14 @@ namespace X0_Server
                 if (winer == 1)
                 {
                     Console.WriteLine("X win!");
-                    await SendAll(player_who_is_X);
+                    await SendAllAboutWinner(player_who_is_X);
                 }
                 else if(winer == 2)
                 {
                     Console.WriteLine("0 win!");
-                    await SendAll(player_who_is_0);
+                    await SendAllAboutWinner(player_who_is_0);
                 }
-                await SendAll(player_who_is_X,number);
+                await SendAllMovement(player_who_is_X,number);
                 xMove = !xMove;
             }
         }
@@ -141,21 +145,21 @@ namespace X0_Server
             {
                 map[number] = 2;
                 int winner = FindWinner(map);
-                await SendAll(player_who_is_0, number);
+                await SendAllMovement(player_who_is_0, number);
                 if (winner == 1)
                 {
                     Console.WriteLine("X win!");
-                    await SendAll(player_who_is_X);
+                    await SendAllAboutWinner(player_who_is_X);
                 }
                 else if (winner == 2)
                 {
                     Console.WriteLine("0 win!");
-                    await SendAll(player_who_is_0);
+                    await SendAllAboutWinner(player_who_is_0);
                 }
                 else if (winner == 3)
                 {
                     Console.WriteLine("No one win!");
-                    await SendAllMessageAboutDraw();
+                    await SendAllAboutDraw();
                 }
                 xMove = !xMove;
             }

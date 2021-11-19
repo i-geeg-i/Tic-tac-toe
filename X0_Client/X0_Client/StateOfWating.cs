@@ -23,7 +23,7 @@ namespace X0_Client
             string answerCode = message[0];
             if (answerCode == KnowledgeCenter.getInstance().codeOfGameStart)
             {
-                _game._ConditionState = new StateOfGame(_game);
+                _game.ConditionState = new StateOfGame(_game);
             }
             else
             {
