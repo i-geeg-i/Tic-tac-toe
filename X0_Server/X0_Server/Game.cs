@@ -58,7 +58,7 @@ namespace X0_Server
                 await SendAll();
             }
         }
-        public int FindWinner(int[] map)
+        private int FindWinner(int[] map)
         {
             //TODO: check 
             if (map[0] == 1 && map[1] == 1 && map[2] == 1)
@@ -74,27 +74,33 @@ namespace X0_Server
                 return 0; //no one win
             }
         }
-        public static int CreateId()
+        private static int CreateId()
         {
             Random random = new Random();
             return random.Next(10000, 99999); 
         }
-        public async Task SendAll()
+        private async Task SendAll()
         {
-            player_who_is_0.Send("5");
-            player_who_is_X.Send("5");
+            var tasks = new Task[2];
+            tasks[0] = player_who_is_X.Send("5"); //Can it be like this?
+            tasks[1] = player_who_is_0.Send("5");
+            Task.WaitAll(tasks);
         }
-        public async Task SendAllMessageAboutDraw()
+        private async Task SendAllMessageAboutDraw() //!!!
         {
-            player_who_is_0.Send($"7");
-            player_who_is_X.Send($"7");
+            var tasks = new Task[2];
+            tasks[0] = player_who_is_0.Send($"7"); //Can it be like this?
+            tasks[1] = player_who_is_X.Send($"7");
+            Task.WaitAll(tasks);
         }
-        public async Task SendAll(Player winer)
+        private async Task SendAll(Player winer)
         {
-            player_who_is_0.Send($"4|{winer.id}");
-            player_who_is_X.Send($"4|{winer.id}");
+            var tasks = new Task[2];
+            tasks[0] = player_who_is_0.Send($"4|{winer.id}"); //Can it be like this?
+            tasks[1] = player_who_is_X.Send($"4|{winer.id}");
+            Task.WaitAll(tasks);
         }
-        public async Task SendAll(Player playerWhoMove, int numberOfCell)
+        private async Task SendAll(Player playerWhoMove, int numberOfCell)
         {
             string movement = "";
             for (int i = 0; i < map.Length-1; i++)
@@ -103,8 +109,10 @@ namespace X0_Server
                 movement += ".";
             }
             movement += map[map.Length-1].ToString();
-            player_who_is_0.Send($"3|{playerWhoMove.id}|{numberOfCell}");
-            player_who_is_X.Send($"3|{playerWhoMove.id}|{numberOfCell}");
+            var tasks = new Task[2];
+            tasks[0] = player_who_is_0.Send($"3|{playerWhoMove.id}|{numberOfCell}"); //Can it be like this?
+            tasks[1] = player_who_is_X.Send($"3|{playerWhoMove.id}|{numberOfCell}");
+            Task.WaitAll(tasks);
         }
         public async Task SetX(int number)
         {

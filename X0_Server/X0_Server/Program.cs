@@ -17,7 +17,7 @@ namespace X0_Server
              * {0 - new game},
              * {1 - list of avaliable games},
              * {2 - move},
-             * {3(5 numbers int - id of game)}
+             * {3(5 numbers int - id of game) - connect}
              */ 
             IPAddress ip = IPAddress.Parse("127.0.0.1");
             TcpListener server = new TcpListener(ip, 1337);

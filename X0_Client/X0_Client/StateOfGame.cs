@@ -40,7 +40,8 @@ namespace X0_Client
         {
             string[] message = text.Split('|'); //get value of recived message
             string answerCode = message[0];
-            if (answerCode == "3")
+            KnowledgeCenter knowledgeCenter = KnowledgeCenter.getInstance();
+            if (answerCode == knowledgeCenter.codeOfMovement)
             {
                 if (_game.IsWeX)
                 {
@@ -73,7 +74,7 @@ namespace X0_Client
                     turn = true;
                 }
             }
-            else if(answerCode == "4")
+            else if(answerCode == knowledgeCenter.codeOfWin)
             {
                 if (message[1] == _game.Id.ToString())//TODO somehow catch movement
                 {
@@ -86,7 +87,7 @@ namespace X0_Client
                 play = false;
                 _game.ConditionState = new StateOfMenu(_game);
             }
-            else if(answerCode == "7")
+            else if(answerCode == knowledgeCenter.codeOfDraw)
             {
                 Console.WriteLine("Игра закончилась ничьёй!");
             }

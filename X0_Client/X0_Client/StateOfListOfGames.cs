@@ -37,18 +37,19 @@ namespace X0_Client
             string[] values = text.Split('.');  //get value of list
             return values;
         }
-        private void readerOfListOfGames(string[] values)    //analytic of recived list of games
+        private void readerOfListOfGames(string[] recivedListOfGames)    //analytic of recived list of games
         {
-            if (values.Length == 2 && values[1] == "")
+            string firstRecivedGame = recivedListOfGames[1];
+            if (recivedListOfGames.Length == 2 && firstRecivedGame == "")
             {
                 Console.WriteLine("В данный момент нет доступных игр!");
                 Console.WriteLine("-----");
                 return;
             }
             Console.WriteLine("Игры:");
-            for (int i = 1; i < values.Length; i++)    //go through recived list
+            for (int i = 1; i < recivedListOfGames.Length; i++)    //go through recived list
             {
-                Console.WriteLine($"{i}. { values[i]}");   //value of list output 
+                Console.WriteLine($"{i}. { recivedListOfGames[i]}");   //value of list output 
             }
             Console.WriteLine("-----");
         }

@@ -16,7 +16,7 @@ namespace X0_Client
             Console.WriteLine("New game");
             await _game.Send("0"); // send creat code to server
             Pars(await _game.Recive());
-            _game.ConditionState = new StateOfGame(_game);
+            _game.ConditionState = new StateOfWating(_game);
         }
         private void Pars(string text)
         {

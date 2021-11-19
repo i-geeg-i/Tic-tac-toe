@@ -61,6 +61,7 @@ namespace X0_Server
                 int actuallyReceived = await Stream.ReadAsync(realBuffer, totalReceived, realBuffer.Length - totalReceived);
                 totalReceived += actuallyReceived;  //increasing the value of number recived data
             }
+            Console.WriteLine(Encoding.ASCII.GetString(realBuffer));
             return Encoding.ASCII.GetString(realBuffer);
         }       
         public async Task PlayerHandle()
@@ -70,6 +71,10 @@ namespace X0_Server
                 string recivedString =  await Recive();
                 string[] recivedValues = recivedString.Split('|');
                 int comand = Convert.ToInt32(recivedValues[0]);
+                int comandOfNewGame = 0;
+                int comandOfListOfAvaliableGames = 1;
+                int comandOfMove = 2;
+                int comandOfConnectingToGame = 3;
                 int x = -1;
                 if(recivedValues.Length > 1)
                 {
@@ -81,21 +86,22 @@ namespace X0_Server
                 {
                     players.Add(Client, this);
                     await Send($"6|{id}");
+                    Console.WriteLine($"6|{id}");
                     isThisFirstTime = true;
                 }
                 if (!isThisFirstTime)
                 {
-                    if (comand == 0 && game == null)
+                    if (comand == comandOfNewGame && game == null)
                     {
                         game = new Game(this);
                         KnowledgeCenter.getInstance().games.Add(game);
                     }
-                    else if (comand == 1 && game == null)
+                    else if (comand == comandOfListOfAvaliableGames && game == null)
                     {
                         await Send($"2|{KnowledgeCenter.getInstance().GetOpenGames()}");
                         Console.WriteLine($"2|{KnowledgeCenter.getInstance().GetOpenGames()}");
                     }
-                    else if (comand == 2 && game != null)
+                    else if (comand == comandOfMove && game != null)
                     {
                         if (game.player_who_is_0 == this)
                         {
@@ -114,7 +120,7 @@ namespace X0_Server
                         }
 
                     }
-                    else if (comand == 3 && game == null)
+                    else if (comand == comandOfConnectingToGame && game == null)
                     {
                         game = KnowledgeCenter.getInstance().FindGame(x, this);
                         game.AddPlayer(this);

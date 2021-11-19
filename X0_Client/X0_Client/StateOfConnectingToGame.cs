@@ -32,10 +32,10 @@ namespace X0_Client
         {
             string[] message = text.Split('|'); //get value of recived message
             Console.WriteLine(Convert.ToInt32(message[0])); //id output
-            if(message[0] == "666")
+            string answerCode = message[0];
+            if(answerCode == "666") //666- error code
             {
                 Console.WriteLine("Введено не коректное число!");
-                return;
             }
             Console.WriteLine(Convert.ToInt32(message[1])); //x or 0; if 1 => x else if 2 => 0
             if (Convert.ToInt32(message[1]) == 1)

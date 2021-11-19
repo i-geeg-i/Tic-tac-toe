@@ -21,7 +21,7 @@ namespace X0_Client
         {
             string[] message = RecivedText.Split('|'); //get value of recived message
             string answerCode = message[0];
-            if (answerCode == "5")
+            if (answerCode == KnowledgeCenter.getInstance().codeOfGameStart)
             {
                 _game._ConditionState = new StateOfGame(_game);
             }
