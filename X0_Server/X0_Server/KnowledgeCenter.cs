@@ -21,7 +21,7 @@ namespace X0_Server
                 instance = new KnowledgeCenter();
             return instance;
         }
-        public int GetId()
+        public int GetNextId()
         {
             int id = -1;
             foreach (KeyValuePair<TcpClient, Player> kvp in players)

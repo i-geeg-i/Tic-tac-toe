@@ -18,7 +18,7 @@ namespace X0_Server
         {
             Client = client;
             Stream = Client.GetStream();
-            id = KnowledgeCenter.getInstance().GetId();
+            id = KnowledgeCenter.getInstance().GetNextId();
         }
         
         async public Task Send(string text)  //function that send data to server
