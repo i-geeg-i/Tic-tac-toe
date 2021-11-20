@@ -57,7 +57,7 @@ namespace X0_Client
                 }
                 else
                 {
-                    if (answerCode == _game.Id.ToString())
+                    if (message[1] == _game.Id.ToString())
                     {
                         _game.map[Convert.ToInt32(message[2])] = 2;
                     }
