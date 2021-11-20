@@ -58,14 +58,28 @@ namespace X0_Server
                 await SendAllAboutConnection();
             }
         }
+        private bool CheckDraw(int[] map)
+        {
+            for (int i = 0; i < map.Length; i++)
+            {
+                if (map[i] == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
         private int FindWinner(int[] map)
         {
-            //TODO: check 
-            if (map[0] == 1 && map[1] == 1 && map[2] == 1)
+            if (CheckDraw(map))
+            {
+                return 3;
+            }
+            else if ((map[0] == 1 && map[1] == 1 && map[2] == 1) || (map[3] == 1 && map[4] == 1 && map[5] == 1) || (map[6] == 1 && map[7] == 1 && map[8] == 1) || (map[0] == 1 && map[3] == 1 && map[6] == 1) || (map[1] == 1 && map[4] == 1 && map[7] == 1) || (map[2] == 1 && map[5] == 1 && map[8] == 1) || (map[0] == 1 && map[4] == 1 && map[8] == 1) || (map[2] == 1 && map[4] == 1 && map[6] == 1))
             {
                 return 1; //X is winner 
             }
-            else if (map[0] == 2 && map[1] == 2 && map[2] == 2)
+            else if ((map[0] == 2 && map[1] == 2 && map[2] == 2) || (map[3] == 2 && map[4] == 2 && map[5] == 2) || (map[6] == 2 && map[7] == 2 && map[8] == 2) || (map[0] == 2 && map[3] == 2 && map[6] == 2) || (map[1] == 2 && map[4] == 2 && map[7] == 2) || (map[2] == 2 && map[5] == 2 && map[8] == 2) || (map[0] == 2 && map[4] == 2 && map[8] == 2) || (map[2] == 2 && map[4] == 2 && map[6] == 2))
             {
                 return 2; //Y is winner
             }
@@ -123,19 +137,24 @@ namespace X0_Server
             if (number >= 0  && number <= 8 && map[number] == 0)
             {
                 map[number] = 1;
-                int winer = FindWinner(map);
-                if (winer == 1)
+                await SendAllMovement(player_who_is_X, number);
+                xMove = !xMove;
+                int winner = FindWinner(map);
+                if (winner == 1)
                 {
                     Console.WriteLine("X win!");
                     await SendAllAboutWinner(player_who_is_X);
                 }
-                else if(winer == 2)
+                else if(winner == 2)
                 {
                     Console.WriteLine("0 win!");
                     await SendAllAboutWinner(player_who_is_0);
                 }
-                await SendAllMovement(player_who_is_X,number);
-                xMove = !xMove;
+                else if (winner == 3)
+                {
+                    Console.WriteLine("Draw!");
+                    await SendAllAboutDraw();
+                }
             }
         }
 
@@ -146,6 +165,7 @@ namespace X0_Server
                 map[number] = 2;
                 int winner = FindWinner(map);
                 await SendAllMovement(player_who_is_0, number);
+                xMove = !xMove;
                 if (winner == 1)
                 {
                     Console.WriteLine("X win!");
@@ -158,10 +178,9 @@ namespace X0_Server
                 }
                 else if (winner == 3)
                 {
-                    Console.WriteLine("No one win!");
+                    Console.WriteLine("Draw!");
                     await SendAllAboutDraw();
                 }
-                xMove = !xMove;
             }
         }
     }

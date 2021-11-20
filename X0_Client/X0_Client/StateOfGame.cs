@@ -77,7 +77,7 @@ namespace X0_Client
             }
             else if(answerCode == knowledgeCenter.codeOfWin)
             {
-                if (message[1] == _game.Id.ToString())//TODO somehow catch movement
+                if (message[1] == _game.Id.ToString())
                 {
                     Console.WriteLine("Вы выиграли!");
                 }
