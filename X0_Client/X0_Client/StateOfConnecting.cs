@@ -20,12 +20,12 @@ namespace X0_Client
         private void Pars(string text)
         {
             string[] message = text.Split('|'); //get value of recived message
-            Console.WriteLine(Convert.ToInt32(message[0])); //id output
+            //Console.WriteLine(Convert.ToInt32(message[0])); //id output
             if (message[0] == "666")
             {
                 return;
             }
-            else if (Convert.ToInt32(message[0]) == 6)
+            else if (message[0] == "6")
             {
                 _game.Id = Convert.ToInt32(message[1]);
             }
